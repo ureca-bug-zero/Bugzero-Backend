@@ -10,8 +10,8 @@ import java.util.List;
 @Entity
 @Setter
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class User {
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
+public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 자동으로 1씩 추가
     @Column(name = "id", updatable = false)
