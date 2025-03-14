@@ -6,26 +6,24 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Entity
 @Setter
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
 public class FriendRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 자동으로 1씩 추가
     @Column(name = "id", updatable = false)
-    private Long id;
+    private Integer id;
 
     @Column(name = "status", nullable = false)
     private int status;
 
     @ManyToOne
-    @JoinColumn(name = "senderId")  // 보낸 사람
+    @JoinColumn(name = "sender_id")
     private User senderId;
 
     @ManyToOne
-    @JoinColumn(name = "receiverId")  // 받은 사람
+    @JoinColumn(name = "receiver_id")
     private User receiverId;
 }

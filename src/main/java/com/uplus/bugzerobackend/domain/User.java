@@ -10,24 +10,25 @@ import java.util.List;
 @Entity
 @Setter
 @Getter
+@Table(name = "`user`")
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
-public class Users {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 자동으로 1씩 추가
     @Column(name = "id", updatable = false)
-    private Long id;
+    private Integer id;
 
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "email", nullable = false)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
     @Column(name = "weekScore", nullable = false)
-    private String weekScore;
+    private Integer weekScore;
 
-    @Column(name = "rank", nullable = false)
-    private String rank;
+    @Column(name = "`rank`", nullable = false)
+    private Integer rank;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Friend friend;
