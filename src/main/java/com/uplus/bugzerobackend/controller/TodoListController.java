@@ -1,6 +1,6 @@
 package com.uplus.bugzerobackend.controller;
 
-import com.uplus.bugzerobackend.dto.TodoList;
+import com.uplus.bugzerobackend.dto.TodoListDto;
 import com.uplus.bugzerobackend.service.TodoListService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +26,7 @@ public class TodoListController {
 
     // TodoList 추가
     @PostMapping
-    public ResponseEntity<String> createTodoList(@RequestBody TodoList todoList) {
+    public ResponseEntity<String> createTodoList(@RequestBody TodoListDto todoList) {
 //    	log.debug("createTodoList todoList:{}", todoList);
     	System.out.println("todoList:"+todoList);
         todoListService.insert(todoList);
@@ -35,21 +35,21 @@ public class TodoListController {
 
     // TodoList 조회
     @GetMapping("/{id}")
-    public ResponseEntity<TodoList> getTodoList(@PathVariable Integer id) {
-        TodoList todoList = todoListService.search(id);
+    public ResponseEntity<TodoListDto> getTodoList(@PathVariable Integer id) {
+        TodoListDto todoList = todoListService.search(id);
         return ResponseEntity.ok(todoList);
     }
 
     // 모든 TodoList 조회
     @GetMapping
-    public ResponseEntity<List<TodoList>> getAllTodoLists() {
-        List<TodoList> todoLists = todoListService.searchAll();
+    public ResponseEntity<List<TodoListDto>> getAllTodoLists() {
+        List<TodoListDto> todoLists = todoListService.searchAll();
         return ResponseEntity.ok(todoLists);
     }
 
     // TodoList 수정
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateTodoList(@PathVariable Integer id, @RequestBody TodoList todoList) {
+    public ResponseEntity<String> updateTodoList(@PathVariable Integer id, @RequestBody TodoListDto todoList) {
         todoList.setId(id);
         todoListService.update(todoList);
         return ResponseEntity.ok("TodoList가 성공적으로 수정되었습니다.");

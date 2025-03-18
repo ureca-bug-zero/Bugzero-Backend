@@ -6,7 +6,7 @@
 
     <!-- TodoList 삽입 -->
 
-	<insert id="insert" parameterType="com.uplus.bugzerobackend.dto.TodoList">
+	<insert id="insert" parameterType="com.uplus.bugzerobackend.dto.TodoList" useGeneratedKeys="true" keyProperty="id">
 	    INSERT INTO todo_list (date, content, is_mission, is_checked, link, user_id)
 	    VALUES (#{date}, #{content}, #{isMission}, #{isChecked}, #{link}, #{userId}) 
 	</insert>
