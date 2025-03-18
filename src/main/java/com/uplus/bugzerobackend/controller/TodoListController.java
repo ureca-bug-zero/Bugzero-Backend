@@ -57,7 +57,7 @@ public class TodoListController {
 
     // TodoList 삭제
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteTodoList(@PathVariable Integer id) {
+    public ResponseEntity<String> deleteTodoList(@PathVariable("id") Integer id) {
         todoListService.remove(id);
         return ResponseEntity.ok("TodoList가 성공적으로 삭제되었습니다.");
     }

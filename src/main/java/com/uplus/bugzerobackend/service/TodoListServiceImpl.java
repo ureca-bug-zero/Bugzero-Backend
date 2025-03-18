@@ -93,9 +93,14 @@ public class TodoListServiceImpl implements TodoListService {
     @Override
     public void remove(Integer id) {
         try {
+        	TodoList existingTodoList = todoListDao.search(id);
+        	if(existingTodoList == null) {
+        		throw new TodoListException("삭제할 Todolist를 찾을 수 없습니다.");
+        	}
             todoListDao.remove(id);
         } catch (Exception e) {
             throw new TodoListException("TodoList 삭제 중 오류 발생: " + e.getMessage());
         }
     }
+    
 }
