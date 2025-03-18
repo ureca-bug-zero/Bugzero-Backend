@@ -35,7 +35,7 @@ public class TodoListController {
 
     // TodoList 조회
     @GetMapping("/{id}")
-    public ResponseEntity<TodoList> getTodoList(@PathVariable Long id) {
+    public ResponseEntity<TodoList> getTodoList(@PathVariable Integer id) {
         TodoList todoList = todoListService.search(id);
         return ResponseEntity.ok(todoList);
     }
@@ -49,7 +49,7 @@ public class TodoListController {
 
     // TodoList 수정
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateTodoList(@PathVariable Long id, @RequestBody TodoList todoList) {
+    public ResponseEntity<String> updateTodoList(@PathVariable Integer id, @RequestBody TodoList todoList) {
         todoList.setId(id);
         todoListService.update(todoList);
         return ResponseEntity.ok("TodoList가 성공적으로 수정되었습니다.");
@@ -57,7 +57,7 @@ public class TodoListController {
 
     // TodoList 삭제
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteTodoList(@PathVariable Long id) {
+    public ResponseEntity<String> deleteTodoList(@PathVariable Integer id) {
         todoListService.remove(id);
         return ResponseEntity.ok("TodoList가 성공적으로 삭제되었습니다.");
     }
