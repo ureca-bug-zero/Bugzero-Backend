@@ -40,6 +40,12 @@ public class SchedulerService implements SchedulingConfigurer{
 	@Value("${schedule.rankingUse}")
 	private boolean isRankingSchedulerEnabled;
 	
+	@Value("${schedule.weekScoreCron}")
+	private String weekScoreCronExpression;
+	
+	@Value("${schedule.weekScoreUse}")
+	private boolean weekScoreSchedulerEnabled;
+	
 	private final ThreadPoolTaskScheduler taskScheduler = new ThreadPoolTaskScheduler(); // 실제 작업 실행할 스레드 풀 (기본 1개의 스레드) 
 	
 	@Override
