@@ -29,10 +29,16 @@ import com.uplus.bugzerobackend.mapper.UserMapper;
 // SchedulingConfigurer: 스케줄링 설정을 프로그래밍 방식으로 제어할 수 있는 인터페이스
 public class SchedulerService implements SchedulingConfigurer{
 	@Value("${schedule.missionCron}") // application.properties에 값 지정
-	private String cronExpression;
+	private String missionCronExpression;
 	
 	@Value("${schedule.missionUse}")
-	private boolean isSchedulerEnabled;
+	private boolean isMissionSchedulerEnabled;
+	
+	@Value("${schedule.rankingCron}")
+	private String rankingCronExpression;
+	
+	@Value("${schedule.rankingUse}")
+	private boolean isRankingSchedulerEnabled;
 	
 	private final ThreadPoolTaskScheduler taskScheduler = new ThreadPoolTaskScheduler(); // 실제 작업 실행할 스레드 풀 (기본 1개의 스레드) 
 	
@@ -40,18 +46,27 @@ public class SchedulerService implements SchedulingConfigurer{
 	public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {
 		// TODO Auto-generated method stub
 		taskScheduler.initialize(); // 스케줄러 초기화 
-		if(isSchedulerEnabled) {
+		// 미션 자동화
+		if(isMissionSchedulerEnabled) {
 			taskRegistrar.addTriggerTask(
-					this::runScheduledTask, //실행할 작업 _ cronExpression에 정의된 간격으로 반복 실행
-					this.getTrigger() //트리고 설정
+					this::runMissionScheduledTask, //실행할 작업 _ cronExpression에 정의된 간격으로 반복 실행
+					this.getMissionTrigger() //트리거 설정
+					);
+		}
+		// 랭킹 초기화
+		if(isRankingSchedulerEnabled) {
+			taskRegistrar.addTriggerTask(
+					this::runRankingScheduledTask, //실행할 작업 _ cronExpression에 정의된 간격으로 반복 실행
+					this.getRankingTrigger() //트리거 설정
 					);
 		}
 	}
 	
+	// 미션 자동화
 	private final UserMapper userMapper;
 	private final TodoListMapper todoListMapper;
 	
-	private void runScheduledTask() {
+	private void runMissionScheduledTask() {
 		List<UserDto> userList = userMapper.findAll();
 		Random random = new Random();
 		int randomNum = random.nextInt(45000 - 1000) + 1000 ; // 1000 - 44999 사이 랜덤 숫자
@@ -71,8 +86,18 @@ public class SchedulerService implements SchedulingConfigurer{
 		log.info("현재 시간: {}", System.currentTimeMillis());
 	}
 	
-	private Trigger getTrigger() {
-		return new org.springframework.scheduling.support.CronTrigger(cronExpression);
+	private Trigger getMissionTrigger() {
+		return new org.springframework.scheduling.support.CronTrigger(missionCronExpression);
+		
+	}
+	
+	// 랭킹 초기화
+	private void runRankingScheduledTask() {
+		log.info("현재 시간: {}", System.currentTimeMillis());
+	}
+	
+	private Trigger getRankingTrigger() {
+		return new org.springframework.scheduling.support.CronTrigger(rankingCronExpression);
 		
 	}
 }
