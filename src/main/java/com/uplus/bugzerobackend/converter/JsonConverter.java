@@ -7,7 +7,7 @@ import jakarta.persistence.Converter;
 import java.io.IOException;
 import java.util.List;
 @Converter(autoApply = true)  // :흰색_확인_표시: 모든 @Convert 필드에 자동 적용 가능
-public class JsonConverter implements AttributeConverter<List<Integer>, String> {
+public class JsonTypeHandler implements AttributeConverter<List<Integer>, String> {
     private static final ObjectMapper objectMapper = new ObjectMapper();
     // :흰색_확인_표시: Java 객체(List<Integer>) -> JSON(String) 변환 (DB 저장용)
     @Override
