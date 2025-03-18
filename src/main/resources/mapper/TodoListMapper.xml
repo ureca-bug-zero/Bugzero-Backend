@@ -2,25 +2,25 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.uplus.bugzerobackend.mapper.TodoListDao">
+<mapper namespace="com.uplus.bugzerobackend.mapper.TodoListMapper">
 
     <!-- TodoList 삽입 -->
 
-	<insert id="insert" parameterType="com.uplus.bugzerobackend.dto.TodoList" useGeneratedKeys="true" keyProperty="id">
+	<insert id="insert" parameterType="com.uplus.bugzerobackend.dto.TodoListDto" useGeneratedKeys="true" keyProperty="id">
 	    INSERT INTO todo_list (date, content, is_mission, is_checked, link, user_id)
 	    VALUES (#{date}, #{content}, #{isMission}, #{isChecked}, #{link}, #{userId}) 
 	</insert>
 
 
     <!-- TodoList 수정 -->
-    <update id="update" parameterType="com.uplus.bugzerobackend.dto.TodoList">
+    <update id="update" parameterType="com.uplus.bugzerobackend.dto.TodoListDto">
         UPDATE todo_list 
         SET date = #{date}, content = #{content}, is_mission = #{isMission}, 
             is_checked = #{isChecked}, link = #{link}
         WHERE id = #{id}
     </update>
     
-    <select id="searchByUserAndDateAndContent" resultType="com.uplus.bugzerobackend.dto.TodoList">
+    <select id="searchByUserAndDateAndContent" resultType="com.uplus.bugzerobackend.dto.TodoListDto">
         SELECT * FROM todo_list
         WHERE user_id = #{userId}
         AND date = #{date}
@@ -35,7 +35,7 @@
     </select>
 	-->
     <!-- 특정 TodoList 조회 -->
-    <select id="search" parameterType="int" resultType="com.uplus.bugzerobackend.dto.TodoList">
+    <select id="search" parameterType="int" resultType="com.uplus.bugzerobackend.dto.TodoListDto">
         SELECT id, date, content, is_mission, is_checked, link 
         FROM todo_list 
         WHERE id = #{id}
@@ -52,7 +52,7 @@
 	    LEFT JOIN user u ON t.user_id = u.id
 	</select>
     -->
-    <select id="searchAll" resultType="com.uplus.bugzerobackend.dto.TodoList">
+    <select id="searchAll" resultType="com.uplus.bugzerobackend.dto.TodoListDto">
 	    SELECT
 	        id,
 	        date,
