@@ -43,7 +43,7 @@
     </select>
 
     <!-- 모든 TodoList 조회 -->
-	<select id="searchAll" resultType="com.uplus.bugzerobackend.dto.TodoList">
+	<select id="searchAll" resultType="com.uplus.bugzerobackend.dto.TodoListDto">
 	    SELECT 
 	        id, 
 	        date, 
