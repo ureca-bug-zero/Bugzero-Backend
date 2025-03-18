@@ -19,6 +19,7 @@ public class TodoListServiceImpl implements TodoListService {
         this.todoListDao = todoListDao;
     }
 
+    // todo 등록
     @Override
     public void insert(TodoList todoList) {
         try {
@@ -45,11 +46,12 @@ public class TodoListServiceImpl implements TodoListService {
             // 새로운 TodoList 저장
             todoListDao.insert(todoList);
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(); 
             throw new TodoListException("TodoList 추가 중 오류 발생: " + e.getMessage());
         }
     }
 
+    // todo 수정
     @Override
     public void update(TodoList todoList) {
         try {
@@ -63,6 +65,7 @@ public class TodoListServiceImpl implements TodoListService {
         }
     }
 
+    // todo 지정검색(id)
     @Override
     public TodoList search(Integer id) {
         try {
@@ -76,6 +79,7 @@ public class TodoListServiceImpl implements TodoListService {
         }
     }
 
+    // todo 전체검색
     @Override
     public List<TodoList> searchAll() {
         try {
@@ -85,6 +89,7 @@ public class TodoListServiceImpl implements TodoListService {
         }
     }
 
+    // todo 삭제
     @Override
     public void remove(Integer id) {
         try {
