@@ -28,10 +28,10 @@ import com.uplus.bugzerobackend.mapper.UserMapper;
 @RequiredArgsConstructor
 // SchedulingConfigurer: 스케줄링 설정을 프로그래밍 방식으로 제어할 수 있는 인터페이스
 public class SchedulerService implements SchedulingConfigurer{
-	@Value("${schedule.cron}") // application.properties에 값 지정
+	@Value("${schedule.missionCron}") // application.properties에 값 지정
 	private String cronExpression;
 	
-	@Value("${schedule.use}")
+	@Value("${schedule.missionUse}")
 	private boolean isSchedulerEnabled;
 	
 	private final ThreadPoolTaskScheduler taskScheduler = new ThreadPoolTaskScheduler(); // 실제 작업 실행할 스레드 풀 (기본 1개의 스레드) 
