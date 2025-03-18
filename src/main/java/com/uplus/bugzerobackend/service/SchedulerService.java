@@ -94,6 +94,24 @@ public class SchedulerService implements SchedulingConfigurer{
 	// 랭킹 초기화
 	private void runRankingScheduledTask() {
 		List<UserDto> userList = userMapper.findAll();
+		userList.sort((u1, u2) -> u2.getWeekScore().compareTo(u1.getWeekScore()));// weekScore 기준 내림차순
+		
+		int rank = 1;
+		int previousScore = -1;
+		int sameRank = 1; //동점자
+		
+		for(int i = 0; i < userList.size(); i++) {
+			UserDto user = userList.get(i);
+			
+			if(user.getWeekScore() != previousScore) {
+				rank = sameRank; //동점자 아닐 경우, 
+			}
+			
+			user.setRank(rank);
+			previousScore = user.getWeekScore();
+			sameRank++;
+			user.setWeekScore(0);
+		}
 		log.info("현재 시간: {}", System.currentTimeMillis());
 	}
 	
