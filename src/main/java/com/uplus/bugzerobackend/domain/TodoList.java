@@ -39,4 +39,39 @@ public class TodoList {
     @JoinColumn(name = "user_id", nullable = false, columnDefinition = "INTEGER")
 //    @JoinColumn(name = "user_id", nullable = false)
     private User user;
+    
+    // userId 필드는 DB에 저장하지 않고, 객체에서만 사용
+    @Transient
+    private Integer userId;
+
+    // user 객체에서 userId 가져오기
+    public Integer getUserId() {
+        return this.user != null ? this.user.getId() : null;
+    }
+
+    // userId를 설정하면 user 객체도 업데이트
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+        if (userId != null) {
+            this.user = new User();
+            this.user.setId(userId);
+        } else {
+            this.user = null;
+        }
+    }
+
+    // `User` 객체를 설정하는 메서드 (setUser)
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    // `User` 객체를 가져오는 메서드 (getUser)
+    public User getUser() {
+        return this.user;
+    }
+
+    // isMission getter 추가
+    public boolean getIsMission() {
+        return isMission;
+    }
 }
