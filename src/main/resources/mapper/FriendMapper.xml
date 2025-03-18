@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.uplus.bugzerobackend.mapper.FriendMapper">
+    <resultMap id="FriendResultMap" type="com.uplus.bugzerobackend.domain.Friend">
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="friend_list" property="friendList" typeHandler="com.uplus.bugzerobackend.converter.JsonTypeHandler"/>
+    </resultMap>
+
+    <select id="getFriendById" parameterType="int" resultMap="FriendResultMap">
+        SELECT id, user_id, friend_list
+        FROM friend
+        WHERE user_id = #{userId}
+    </select>
+
+</mapper>
