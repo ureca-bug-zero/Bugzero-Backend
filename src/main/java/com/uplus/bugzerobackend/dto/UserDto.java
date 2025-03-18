@@ -8,4 +8,5 @@ import lombok.Setter;
 public class UserDto {
 	private Integer id; //user 
 	private Integer weekScore;
+	private Integer rank;
 }

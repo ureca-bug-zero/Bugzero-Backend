@@ -93,6 +93,7 @@ public class SchedulerService implements SchedulingConfigurer{
 	
 	// 랭킹 초기화
 	private void runRankingScheduledTask() {
+		List<UserDto> userList = userMapper.findAll();
 		log.info("현재 시간: {}", System.currentTimeMillis());
 	}
 	
