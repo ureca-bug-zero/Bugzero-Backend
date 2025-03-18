@@ -59,13 +59,6 @@ public class SchedulerService implements SchedulingConfigurer{
 					this.getMissionTrigger() //트리거 설정
 					);
 		}
-		// weekScore 갱신
-		if(isWeekScoreSchedulerEnabled) {
-			taskRegistrar.addTriggerTask(
-					this::runWeekScoreScheduledTask, //실행할 작업 _ cronExpression에 정의된 간격으로 반복 실행
-					this.getWeekScoreTrigger() //트리거 설정
-					);
-		}		
 		// 랭킹 초기화
 		if(isRankingSchedulerEnabled) {
 			taskRegistrar.addTriggerTask(
@@ -75,7 +68,6 @@ public class SchedulerService implements SchedulingConfigurer{
 		}
 	}
 	
-	// 미션 자동화
 	private final UserMapper userMapper;
 	private final TodoListMapper todoListMapper;
 	
@@ -85,6 +77,7 @@ public class SchedulerService implements SchedulingConfigurer{
 		int randomNum = random.nextInt(45000 - 1000) + 1000 ; // 1000 - 44999 사이 랜덤 숫자
 		
 		for (UserDto user : userList) {
+			// 미션 자동화 
 			TodoListDto todo = new TodoListDto();
 			todo.setUserId(user.getId());
 			todo.setContent("오늘의 미션 문제");
@@ -94,25 +87,16 @@ public class SchedulerService implements SchedulingConfigurer{
 			todo.setDate(LocalDate.now());
 			
 			todoListMapper.insert(todo);
+			
+			// weekScore 갱신 _ search(todo) 수정 후 다시
+			int originWeekScore = user.getWeekScore();	
 		}
 
 		log.info("현재 시간: {}", System.currentTimeMillis());
 	}
-	
 	private Trigger getMissionTrigger() {
 		return new org.springframework.scheduling.support.CronTrigger(missionCronExpression);
-		
 	}
-	
-	// weekScore 갱신
-	private void runWeekScoreScheduledTask() {
-		log.info("현재 시간: {}", System.currentTimeMillis());
-	}
-	
-	private Trigger getWeekScoreTrigger() {
-		return new org.springframework.scheduling.support.CronTrigger(weekScoreCronExpression);
-		
-	}	
 	
 	// 랭킹 초기화
 	private void runRankingScheduledTask() {
@@ -137,7 +121,6 @@ public class SchedulerService implements SchedulingConfigurer{
 		}
 		log.info("현재 시간: {}", System.currentTimeMillis());
 	}
-	
 	private Trigger getRankingTrigger() {
 		return new org.springframework.scheduling.support.CronTrigger(rankingCronExpression);
 		
