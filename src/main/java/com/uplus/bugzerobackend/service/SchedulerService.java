@@ -44,7 +44,7 @@ public class SchedulerService implements SchedulingConfigurer{
 	private String weekScoreCronExpression;
 	
 	@Value("${schedule.weekScoreUse}")
-	private boolean weekScoreSchedulerEnabled;
+	private boolean isWeekScoreSchedulerEnabled;
 	
 	private final ThreadPoolTaskScheduler taskScheduler = new ThreadPoolTaskScheduler(); // 실제 작업 실행할 스레드 풀 (기본 1개의 스레드) 
 	
@@ -59,6 +59,13 @@ public class SchedulerService implements SchedulingConfigurer{
 					this.getMissionTrigger() //트리거 설정
 					);
 		}
+		// weekScore 갱신
+		if(isWeekScoreSchedulerEnabled) {
+			taskRegistrar.addTriggerTask(
+					this::runWeekScoreScheduledTask, //실행할 작업 _ cronExpression에 정의된 간격으로 반복 실행
+					this.getWeekScoreTrigger() //트리거 설정
+					);
+		}		
 		// 랭킹 초기화
 		if(isRankingSchedulerEnabled) {
 			taskRegistrar.addTriggerTask(
@@ -96,6 +103,16 @@ public class SchedulerService implements SchedulingConfigurer{
 		return new org.springframework.scheduling.support.CronTrigger(missionCronExpression);
 		
 	}
+	
+	// weekScore 갱신
+	private void runWeekScoreScheduledTask() {
+		log.info("현재 시간: {}", System.currentTimeMillis());
+	}
+	
+	private Trigger getWeekScoreTrigger() {
+		return new org.springframework.scheduling.support.CronTrigger(weekScoreCronExpression);
+		
+	}	
 	
 	// 랭킹 초기화
 	private void runRankingScheduledTask() {
