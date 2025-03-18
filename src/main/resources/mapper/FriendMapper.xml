@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.uplus.bugzerobackend.mapper.FriendMapper">
+    <select id="search" parameterType="int" resultType="Friend">
+        SELECT id, user_id AS userId, friend_list AS friendList
+        FROM friends
+        WHERE user_id = #{userId}
+    </select>
+
+</mapper>
