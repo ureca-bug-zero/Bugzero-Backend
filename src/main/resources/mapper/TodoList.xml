@@ -13,13 +13,45 @@
 
 
     <!-- TodoList 수정 -->
+    <!--
     <update id="update" parameterType="com.uplus.bugzerobackend.dto.TodoList">
         UPDATE todo_list 
         SET date = #{date}, content = #{content}, is_mission = #{isMission}, 
             is_checked = #{isChecked}, link = #{link}
         WHERE id = #{id}
-    </update>
-    
+    </update>		
+	-->
+	
+	<!-- TodoList 수정 (userId와 id가 둘 다 일치하는 경우만 수정) -->
+	<!--
+	<update id="update" parameterType="com.uplus.bugzerobackend.dto.TodoList">
+	    UPDATE todo_list 
+	    <set>
+	        <trim suffixOverrides=",">
+	            <if test="date != null"> date = #{date}, </if>
+	            <if test="content != null and content != ''"> content = #{content}, </if>
+	            <if test="isMission != null"> is_mission = #{isMission}, </if>
+	            <if test="isChecked != null"> is_checked = #{isChecked}, </if>
+	            <if test="link != null and link != ''"> link = #{link}, </if>
+	        </trim>
+	    </set>
+	    WHERE id = #{id, jdbcType=INTEGER} AND user_id = #{userId, jdbcType=INTEGER}
+	</update>	
+	-->
+	<update id="update">
+	    UPDATE todo_list 
+	    SET 
+	        date = CASE WHEN #{date} IS NOT NULL THEN #{date} ELSE date END,
+	        content = CASE WHEN #{content} IS NOT NULL AND #{content} != '' THEN #{content} ELSE content END,
+	        is_mission = CASE WHEN #{isMission} IS NOT NULL THEN #{isMission} ELSE is_mission END,
+	        is_checked = CASE WHEN #{isChecked} IS NOT NULL THEN #{isChecked} ELSE is_checked END,
+	        link = CASE WHEN #{link} IS NOT NULL AND #{link} != '' THEN #{link} ELSE link END
+	    WHERE id = #{id} AND user_id = #{userId}
+	</update>
+
+
+
+
     <select id="searchByUserAndDateAndContent" resultType="com.uplus.bugzerobackend.dto.TodoList">
         SELECT * FROM todo_list
         WHERE user_id = #{userId}
@@ -34,8 +66,9 @@
         WHERE id = #{userId}
     </select>
 	-->
+	
     <!-- 특정 TodoList 조회 -->
-    <select id="search" parameterType="long" resultType="com.uplus.bugzerobackend.dto.TodoList">
+    <select id="search" parameterType="int" resultType="com.uplus.bugzerobackend.dto.TodoList">
         SELECT id, date, content, is_mission, is_checked, link 
         FROM todo_list 
         WHERE id = #{id}
@@ -72,7 +105,7 @@
 
 
     <!-- TodoList 삭제 -->
-    <delete id="remove" parameterType="long">
+    <delete id="remove" parameterType="int">
         DELETE FROM todo_list WHERE id = #{id}
     </delete>
     

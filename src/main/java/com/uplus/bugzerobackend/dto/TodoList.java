@@ -45,5 +45,13 @@ public class TodoList {
 
     public void setUser(User user) {
         this.user = user;
-    }    
+    }
+    
+    public boolean getIsMission() {
+        return isMission;
+    }
+
+    public boolean getIsChecked() {
+        return isChecked;
+    }
 }

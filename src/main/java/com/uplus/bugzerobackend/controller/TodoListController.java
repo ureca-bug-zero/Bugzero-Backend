@@ -49,7 +49,7 @@ public class TodoListController {
 
     // TodoList 수정
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateTodoList(@PathVariable Integer id, @RequestBody TodoList todoList) {
+    public ResponseEntity<String> updateTodoList(@PathVariable("id") Integer id, @RequestBody TodoList todoList) {
         todoList.setId(id);
         todoListService.update(todoList);
         return ResponseEntity.ok("TodoList가 성공적으로 수정되었습니다.");
@@ -57,7 +57,7 @@ public class TodoListController {
 
     // TodoList 삭제
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteTodoList(@PathVariable Integer id) {
+    public ResponseEntity<String> deleteTodoList(@PathVariable("id") Integer id) {
         todoListService.remove(id);
         return ResponseEntity.ok("TodoList가 성공적으로 삭제되었습니다.");
     }
