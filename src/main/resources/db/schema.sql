@@ -6,7 +6,6 @@ CREATE TABLE IF NOT EXISTS `user` (
     `rank` INT NOT NULL
     );
 
-
 CREATE TABLE IF NOT EXISTS friend (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
@@ -31,3 +30,12 @@ CREATE TABLE IF NOT EXISTS calendar (
     user_id INT NOT NULL,
     FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
     );
+    
+CREATE TABLE IF NOT EXISTS friend_request (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    status INT NOT NULL,  -- 요청 상태 (0: 대기, 1: 수락, 2: 거절)
+    sender_id INT NOT NULL,
+    receiver_id INT NOT NULL,
+    FOREIGN KEY (sender_id) REFERENCES user(id) ON DELETE CASCADE,
+    FOREIGN KEY (receiver_id) REFERENCES user(id) ON DELETE CASCADE
+);
