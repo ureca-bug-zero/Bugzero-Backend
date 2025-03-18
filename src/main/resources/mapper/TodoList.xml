@@ -6,7 +6,7 @@
 
     <!-- TodoList 삽입 -->
 
-	<insert id="insert" parameterType="com.uplus.bugzerobackend.dto.TodoList">
+	<insert id="insert" parameterType="com.uplus.bugzerobackend.domain.TodoList" useGeneratedKeys="true" keyProperty="id">
 	    INSERT INTO todo_list (date, content, is_mission, is_checked, link, user_id)
 	    VALUES (#{date}, #{content}, #{isMission}, #{isChecked}, #{link}, #{userId}) 
 	</insert>
@@ -41,33 +41,17 @@
         WHERE id = #{id}
     </select>
 
-    <!-- 모든 TodoList 조회 
-    <select id="searchAll" resultType="com.uplus.bugzerobackend.todo.model.dto.TodoList">
-        SELECT id, date, content, is_mission, is_checked, link 
-        FROM todo_list
-    </select>
-    <select id="searchAll" resultType="com.uplus.bugzerobackend.todo.model.dto.TodoList">
-	    SELECT t.id, t.date, t.content, t.is_mission, t.is_checked, t.link, t.user_id AS userId, u.* 
-	    FROM todo_list t
-	    LEFT JOIN user u ON t.user_id = u.id
-	</select>
-    -->
-    <select id="searchAll" resultMap="todoListResultMap">
+    <!-- 모든 TodoList 조회 -->
+	<select id="searchAll" resultType="com.uplus.bugzerobackend.dto.TodoList">
 	    SELECT 
-	        t.id AS id,
-	        t.date AS date,
-	        t.content AS content,
-	        t.is_mission AS is_mission,
-	        t.is_checked AS is_checked,
-	        t.link AS link,
-	        t.user_id AS user_id,
-	        u.id AS id,
-	        u.name AS name,
-	        u.email,
-	        u.rank,
-	        u.week_score
-	    FROM todo_list t
-	    LEFT JOIN user u ON t.user_id = u.id
+	        id, 
+	        date, 
+	        content, 
+	        is_mission, 
+	        is_checked, 
+	        link, 
+	        user_id AS userId 
+	    FROM todo_list
 	</select>
 
 
@@ -76,24 +60,5 @@
         DELETE FROM todo_list WHERE id = #{id}
     </delete>
     
-    <!-- resultMap 설정 -->
-    <resultMap id="todoListResultMap" type="com.uplus.bugzerobackend.dto.TodoList">
-	    <id property="id" column="id"/>
-	    <result property="date" column="date"/>
-	    <result property="content" column="content"/>
-	    <result property="isMission" column="is_mission"/>
-	    <result property="isChecked" column="is_checked"/>
-	    <result property="link" column="link"/>
-	    <result property="userId" column="user_id"/>
-	
-	    <!-- user 객체 매핑 (user_id 컬럼을 user 객체로 매핑) -->
-	    <association property="user" column="user_id" javaType="com.uplus.bugzerobackend.domain.User">
-	        <id property="id" column="id"/>
-	        <result property="name" column="name"/>
-	        <result property="email" column="email"/>
-	        <result property="weekScore" column="week_score"/>
-	        <result property="rank" column="rank"/>
-	    </association>
-	</resultMap>
 
 </mapper>
