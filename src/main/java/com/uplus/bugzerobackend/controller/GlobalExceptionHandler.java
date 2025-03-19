@@ -51,7 +51,6 @@ public class GlobalExceptionHandler {
     // 500 - 기타 서버 내부 오류
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponseDto<Object>> handleGeneralException(Exception ex) {
-    	ex.printStackTrace();
     	return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(ApiResponseDto.failure("E500", "서버 내부 오류가 발생했습니다. 잠시 후 다시 시도해주세요."));
     }

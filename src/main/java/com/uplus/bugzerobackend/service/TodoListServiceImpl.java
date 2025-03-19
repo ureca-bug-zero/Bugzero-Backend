@@ -52,46 +52,17 @@ public class TodoListServiceImpl implements TodoListService {
     }
 
     // todo 수정
-//    @Override
-//    public void update(TodoList todoList) {
-//        try {
-//            TodoList existingTodoList = todoListDao.search(todoList.getId());
-//            if (existingTodoList == null) {
-//                throw new TodoListException("수정할 TodoList를 찾을 수 없습니다.");
-//            }
-//            
-//            // 입력값 검증
-//            if (todoList.getContent() == null || todoList.getContent().trim().isEmpty()){
-//				throw new TodoListException("할 일의 내용이 비어 있을 수 없습니다.");
-//			}
-//            
-//            // 업데이트 수행
-//            todoListDao.update(todoList);
-//        } catch (Exception e) {
-//            throw new TodoListException("TodoList 수정 중 오류 발생: " + e.getMessage());
-//        }
-//    }
     @Override
     public void update(TodoListDto todoList) {
         try {
             if (todoList.getId() == null || todoList.getUserId() == null) {
                 throw new TodoListException("TodoList ID 또는 User ID가 필요합니다.");
             }
-
             TodoListDto existingTodoList = todoListDao.search(todoList.getId());
             if (existingTodoList == null) {
                 throw new TodoListException("수정할 TodoList를 찾을 수 없습니다.");
             }
-
-            todoListDao.update(
-                todoList.getId(),
-                todoList.getUserId(),
-                todoList.getDate(),
-                todoList.getContent(),
-                todoList.getIsMission(),
-                todoList.getIsChecked(),
-                todoList.getLink()
-            );
+            todoListDao.update(todoList);	// Dto 객체 자체를 전달
         } catch (Exception e) {
             throw new TodoListException("TodoList 수정 중 오류 발생: " + e.getMessage());
         }
