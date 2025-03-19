@@ -14,5 +14,12 @@
         FROM friend
         WHERE user_id = #{userId}
     </select>
+    
+    <update id="deleteFriend" parameterType="map">
+		UPDATE friend
+		SET friendList = JSON_REMOVE(friendList, 
+			JSON_UNQUOTE(JSON_SEARCH(friendList, 'one', #{friendId}, nULL, '$[*].friendId')))
+		WHERE user_id = #{userId}
+	</update>
 
 </mapper>
