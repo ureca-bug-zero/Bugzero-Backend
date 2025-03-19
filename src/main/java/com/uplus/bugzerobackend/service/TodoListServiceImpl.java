@@ -7,6 +7,7 @@ import com.uplus.bugzerobackend.TodoListException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service 
@@ -69,7 +70,7 @@ public class TodoListServiceImpl implements TodoListService {
     }
 
 
-    // todo 지정검색(id)
+    // todo 지정검색(todolist id로 검색)
     @Override
     public TodoListDto search(Integer id) {
         try {
@@ -83,14 +84,13 @@ public class TodoListServiceImpl implements TodoListService {
         }
     }
 
-    // todo 전체검색
+    // 특정 유저의 todo 전체검색
     @Override
-    public List<TodoListDto> searchAll() {
-        try {
-            return todoListDao.searchAll();
-        } catch (Exception e) {
-            throw new TodoListException("TodoList 목록 조회 중 오류 발생: " + e.getMessage());
-        }
+    public List<TodoListDto> searchAll(Integer id) {
+        List<TodoListDto> todoList = todoListDao.searchAll(id);
+        
+        // 빈 리스트 반환 (예외 던지지 않음)
+        return todoList != null ? todoList : Collections.emptyList();
     }
 
     // todo 삭제
