@@ -6,6 +6,7 @@ import lombok.Setter;
 @Setter
 @Getter
 public class KakaoUserDto {
+	private Integer id;
     private String name;	//kakao nickname
     private String email;	//kakao email
     private Integer weekScore;
