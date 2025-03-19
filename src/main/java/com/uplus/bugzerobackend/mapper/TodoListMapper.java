@@ -13,7 +13,7 @@ public interface TodoListMapper {
     TodoListDto search(Integer id);        // TodoList 조회
     List<TodoListDto> searchAll();      // 모든 TodoList 조회
     void remove(Integer id);            // TodoList 삭제
-
+    
     // 같은 유저가 같은 날짜, 같은 내용의 Todo를 추가했는지 확인
     TodoListDto searchByUserAndDateAndContent(
         @Param("userId") Integer userId, 
