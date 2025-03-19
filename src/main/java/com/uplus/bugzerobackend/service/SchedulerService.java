@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j; //log
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -40,12 +42,6 @@ public class SchedulerService implements SchedulingConfigurer{
 	@Value("${schedule.rankingUse}")
 	private boolean isRankingSchedulerEnabled;
 	
-	@Value("${schedule.weekScoreCron}")
-	private String weekScoreCronExpression;
-	
-	@Value("${schedule.weekScoreUse}")
-	private boolean isWeekScoreSchedulerEnabled;
-	
 	private final ThreadPoolTaskScheduler taskScheduler = new ThreadPoolTaskScheduler(); // 실제 작업 실행할 스레드 풀 (기본 1개의 스레드) 
 	
 	@Override
@@ -77,6 +73,29 @@ public class SchedulerService implements SchedulingConfigurer{
 		int randomNum = random.nextInt(45000 - 1000) + 1000 ; // 1000 - 44999 사이 랜덤 숫자
 		
 		for (UserDto user : userList) {
+			// weekScore 갱신 _ search(todo) 수정 후 다시
+			int originWeekScore = user.getWeekScore();
+			List<TodoListDto> searchedTodoList = todoListMapper.search(user.getId(), LocalDate.now().minusDays(1));
+			// 체크한 내용 크기 
+			long checkedCount = searchedTodoList.stream().filter(todo -> todo.isChecked() == true).count();
+			// 전체 크기
+			int totalCount = searchedTodoList.size();
+			// 미션인 값 가져와서 isChecked인지 확인
+			Optional<TodoListDto> missionTodo = searchedTodoList.stream().filter(todo -> todo.isMission() == true).findFirst();
+			boolean isMissionChecked = missionTodo.map(TodoListDto::isChecked).orElse(false);
+			
+			if(isMissionChecked) {
+				double newScore =  originWeekScore + ((double) checkedCount/totalCount * 1.5);
+				log.info("{}" , newScore);
+				user.setWeekScore((int) Math.round(newScore));
+			} else {
+				double newScore = originWeekScore + ((double) checkedCount/totalCount);
+				log.info("{}" , newScore);
+				user.setWeekScore((int) Math.round(newScore));
+			}
+			
+			userMapper.update(user);
+			
 			// 미션 자동화 
 			TodoListDto todo = new TodoListDto();
 			todo.setUserId(user.getId());
@@ -88,10 +107,7 @@ public class SchedulerService implements SchedulingConfigurer{
 			
 			todoListMapper.insert(todo);
 			
-			// weekScore 갱신 _ search(todo) 수정 후 다시
-			int originWeekScore = user.getWeekScore();	
 		}
-
 		log.info("현재 시간: {}", System.currentTimeMillis());
 	}
 	private Trigger getMissionTrigger() {
@@ -103,21 +119,10 @@ public class SchedulerService implements SchedulingConfigurer{
 		List<UserDto> userList = userMapper.findAll();
 		userList.sort((u1, u2) -> u2.getWeekScore().compareTo(u1.getWeekScore()));// weekScore 기준 내림차순
 		
-		int rank = 1;
-		int previousScore = -1;
-		int sameRank = 1; //동점자
-		
-		for(int i = 0; i < userList.size(); i++) {
-			UserDto user = userList.get(i);
-			
-			if(user.getWeekScore() != previousScore) {
-				rank = sameRank; //동점자 아닐 경우, 
-			}
-			
-			user.setRank(rank);
-			previousScore = user.getWeekScore();
-			sameRank++;
+		for (UserDto user : userList) {
+			user.setRank(user.getId());
 			user.setWeekScore(0);
+			userMapper.update(user);
 		}
 		log.info("현재 시간: {}", System.currentTimeMillis());
 	}
