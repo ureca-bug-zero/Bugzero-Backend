@@ -58,6 +58,7 @@
 	        user_id AS userId 
 	    FROM todo_list
 	    WHERE user_id = #{userId}
+	    AND date = #{date}
 	</select>
 
 

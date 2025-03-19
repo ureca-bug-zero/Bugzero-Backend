@@ -6,9 +6,11 @@ import com.uplus.bugzerobackend.service.TodoListService;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -42,8 +44,11 @@ public class TodoListController {
 
     // 모든 TodoList 조회
     @GetMapping("/user/{id}")
-    public ResponseEntity<List<TodoListDto>> getAllTodoLists(@PathVariable("id") Integer id) {
-        List<TodoListDto> todoList = todoListService.searchAll(id);
+    public ResponseEntity<List<TodoListDto>> getAllTodoLists(
+            @PathVariable("id") Integer id,
+            @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+
+        List<TodoListDto> todoList = todoListService.searchAll(id, date);
         return ResponseEntity.ok(todoList);
     }
 
