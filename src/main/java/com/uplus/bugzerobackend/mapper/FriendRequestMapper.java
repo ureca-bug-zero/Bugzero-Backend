@@ -8,4 +8,5 @@ public interface FriendRequestMapper {
     Integer findUserIdByEmail(@Param("email") String email);
     void insertFriendRequest(FriendRequestDto friendRequestDto);
     void deleteFriendRequest(FriendResponseDto friendResponseDto);
+    void updateFriendList(FriendResponseDto friendResponseDto);
 }

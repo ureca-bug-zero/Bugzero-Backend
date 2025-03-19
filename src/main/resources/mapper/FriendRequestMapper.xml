@@ -16,8 +16,8 @@
 
     <update id="updateFriendList" parameterType="com.uplus.bugzerobackend.dto.FriendResponseDto">
         UPDATE friend
-        SET friend_list = JSON_ARRAY_APPEND(friend_list, '$', #{friend_list})
-        WHERE user_id = #{userId}
+        SET friend_list = JSON_ARRAY_APPEND(friend_list, '$', #{senderId})
+        WHERE user_id= #{receiverId}
     </update>
 
     <delete id="deleteFriendRequest" parameterType="com.uplus.bugzerobackend.dto.FriendResponseDto">
