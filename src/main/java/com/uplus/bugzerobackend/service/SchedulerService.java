@@ -75,7 +75,7 @@ public class SchedulerService implements SchedulingConfigurer{
 		for (UserDto user : userList) {
 			// weekScore 갱신 _ search(todo) 수정 후 다시
 			int originWeekScore = user.getWeekScore();
-			List<TodoListDto> searchedTodoList = todoListMapper.search(user.getId(), LocalDate.now().minusDays(1));
+			List<TodoListDto> searchedTodoList = todoListMapper.searchAll(user.getId(), LocalDate.now().minusDays(1));
 			// 체크한 내용 크기 
 			long checkedCount = searchedTodoList.stream().filter(todo -> todo.isChecked() == true).count();
 			// 전체 크기
