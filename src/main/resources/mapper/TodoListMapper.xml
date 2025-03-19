@@ -14,12 +14,16 @@
 
 
     <!-- TodoList 수정 -->
-    <update id="update" parameterType="com.uplus.bugzerobackend.dto.TodoListDto">
-        UPDATE todo_list 
-        SET date = #{date}, content = #{content}, is_mission = #{isMission}, 
-            is_checked = #{isChecked}, link = #{link}
-        WHERE id = #{id}
-    </update>
+    <update id="update">
+	    UPDATE todo_list
+	    SET
+	        date = CASE WHEN #{date} IS NOT NULL THEN #{date} ELSE date END,
+	        content = CASE WHEN #{content} IS NOT NULL AND #{content} != '' THEN #{content} ELSE content END,
+	        is_mission = CASE WHEN #{isMission} IS NOT NULL THEN #{isMission} ELSE is_mission END,
+	        is_checked = CASE WHEN #{isChecked} IS NOT NULL THEN #{isChecked} ELSE is_checked END,
+	        link = CASE WHEN #{link} IS NOT NULL AND #{link} != '' THEN #{link} ELSE link END
+	    WHERE id = #{id} AND user_id = #{userId}
+	</update>
     
     <select id="searchByUserAndDateAndContent" resultType="com.uplus.bugzerobackend.dto.TodoListDto">
         SELECT * FROM todo_list
@@ -35,14 +39,14 @@
         WHERE id = #{userId}
     </select>
 	-->
-    <!-- 특정 TodoList 조회 -->
+    <!-- 특정 TodoList 조회(todo id로 검색) -->
     <select id="search" parameterType="int" resultType="com.uplus.bugzerobackend.dto.TodoListDto">
-        SELECT id, date, content, is_mission, is_checked, link 
+        SELECT id, date, content, is_mission, is_checked, link, user_id AS userId 
         FROM todo_list 
         WHERE id = #{id}
     </select>
 
-    <!-- 모든 TodoList 조회 -->
+    <!-- 특정 유저의 모든 TodoList 조회 -->
 	<select id="searchAll" resultType="com.uplus.bugzerobackend.dto.TodoListDto">
 	    SELECT 
 	        id, 
@@ -53,6 +57,7 @@
 	        link, 
 	        user_id AS userId 
 	    FROM todo_list
+	    WHERE user_id = #{userId}
 	</select>
 
 
