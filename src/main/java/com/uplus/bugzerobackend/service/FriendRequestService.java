@@ -2,6 +2,7 @@ package com.uplus.bugzerobackend.service;
 
 
 import com.uplus.bugzerobackend.dto.FriendRequestDto;
+import com.uplus.bugzerobackend.dto.FriendResponseDto;
 import com.uplus.bugzerobackend.mapper.FriendRequestMapper;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +20,7 @@ public class FriendRequestService {
 
     public void insertFriendRequest(String email, Integer senderId) {
         try {
-            log.debug("user search");
+//            log.debug("user search");
 
             Integer receiverId = friendRequestMapper.findUserIdByEmail(email);
             if (receiverId == null) {
@@ -28,12 +29,33 @@ public class FriendRequestService {
             FriendRequestDto friendRequestDto = new FriendRequestDto();
             friendRequestDto.setSenderId(senderId);
             friendRequestDto.setReceiverId(receiverId);
-            log.debug("dto 추가");
+//            log.debug("dto 추가");
 
             friendRequestMapper.insertFriendRequest(friendRequestDto);
         } catch(DataAccessException e){
             throw new IllegalStateException("친구 요청을 추가하는 중 오류가 발생하였습니다.");
         }
-
     }
+
+    public void deleteFriendRequest(Integer receiverId, Integer senderId) {
+        try {
+            if (receiverId == null) {
+                throw new IllegalArgumentException("삭제할 친구 요청의 receiverId가 null입니다.");
+            }
+            if (senderId == null) {
+                throw new IllegalArgumentException("삭제할 친구 요청의 senderId가 null입니다.");
+            }
+
+            FriendResponseDto friendResponseDto = new FriendResponseDto();
+            friendResponseDto.setReceiverId(receiverId);
+            friendResponseDto.setSenderId(senderId);
+
+            friendRequestMapper.deleteFriendRequest(friendResponseDto);
+        } catch(DataAccessException e){
+            throw new IllegalStateException("친구 요청 거절 처리 중 오류가 발생하였습니다.");
+        }
+    }
+
+
+
 }

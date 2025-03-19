@@ -9,8 +9,19 @@
         WHERE email = #{email}
     </select>
 
-    <select id="insertFriendRequest" parameterType="com.uplus.bugzerobackend.dto.FriendRequestDto">
+    <insert id="insertFriendRequest" parameterType="com.uplus.bugzerobackend.dto.FriendRequestDto">
         INSERT INTO friend_request (sender_id, receiver_id, status)
         VALUES (#{senderId}, #{receiverId}, 0)
-    </select>
+    </insert>
+
+    <update id="updateFriendList" parameterType="com.uplus.bugzerobackend.dto.FriendResponseDto">
+        UPDATE friend
+        SET friend_list = JSON_ARRAY_APPEND(friend_list, '$', #{friend_list})
+        WHERE user_id = #{userId}
+    </update>
+
+    <delete id="deleteFriendRequest" parameterType="com.uplus.bugzerobackend.dto.FriendResponseDto">
+        DELETE FROM friend_request
+        WHERE sender_id = #{senderId} AND receiver_id = #{receiverId}
+    </delete>
 </mapper>
