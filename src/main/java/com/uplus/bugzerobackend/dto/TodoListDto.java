@@ -6,7 +6,7 @@ import com.uplus.bugzerobackend.domain.User;
 import lombok.Data;
 
 @Data
-public class TodoList {
+public class TodoListDto {
     private Integer id;           // TodoList의 고유 ID
     private LocalDate date;    // 날짜 추가
     private String content;    // 할 일 내용

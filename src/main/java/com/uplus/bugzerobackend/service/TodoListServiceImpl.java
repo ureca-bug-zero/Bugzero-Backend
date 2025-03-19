@@ -1,7 +1,7 @@
 package com.uplus.bugzerobackend.service;
 
-import com.uplus.bugzerobackend.mapper.TodoListDao;
-import com.uplus.bugzerobackend.dto.TodoList;
+import com.uplus.bugzerobackend.mapper.TodoListMapper;
+import com.uplus.bugzerobackend.dto.TodoListDto;
 import com.uplus.bugzerobackend.TodoListException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,16 +12,16 @@ import java.util.List;
 @Service 
 public class TodoListServiceImpl implements TodoListService {
 
-    private final TodoListDao todoListDao;
+    private final TodoListMapper todoListDao;
 
     @Autowired
-    public TodoListServiceImpl(TodoListDao todoListDao) {
+    public TodoListServiceImpl(TodoListMapper todoListDao) {
         this.todoListDao = todoListDao;
     }
 
     // todo 등록
     @Override
-    public void insert(TodoList todoList) {
+    public void insert(TodoListDto todoList) {
         try {
             // 유저 정보 확인
             if (todoList.getUser() == null || todoList.getUser().getId() == null) {
@@ -33,7 +33,7 @@ public class TodoListServiceImpl implements TodoListService {
             todoList.setUserId(userId); 
 
             // 같은 유저가 같은 날짜, 같은 내용의 Todo를 추가했는지 검사
-            TodoList existingTodoList = todoListDao.searchByUserAndDateAndContent(
+            TodoListDto existingTodoList = todoListDao.searchByUserAndDateAndContent(
                 userId, // Integer 타입으로 전달
                 todoList.getDate(), 
                 todoList.getContent()
@@ -72,13 +72,13 @@ public class TodoListServiceImpl implements TodoListService {
 //        }
 //    }
     @Override
-    public void update(TodoList todoList) {
+    public void update(TodoListDto todoList) {
         try {
             if (todoList.getId() == null || todoList.getUserId() == null) {
                 throw new TodoListException("TodoList ID 또는 User ID가 필요합니다.");
             }
 
-            TodoList existingTodoList = todoListDao.search(todoList.getId());
+            TodoListDto existingTodoList = todoListDao.search(todoList.getId());
             if (existingTodoList == null) {
                 throw new TodoListException("수정할 TodoList를 찾을 수 없습니다.");
             }
@@ -100,9 +100,9 @@ public class TodoListServiceImpl implements TodoListService {
 
     // todo 지정검색(id)
     @Override
-    public TodoList search(Integer id) {
+    public TodoListDto search(Integer id) {
         try {
-            TodoList todoList = todoListDao.search(id);
+            TodoListDto todoList = todoListDao.search(id);
             if (todoList == null) {
                 throw new TodoListException("요청한 TodoList를 찾을 수 없습니다.");
             }
@@ -114,7 +114,7 @@ public class TodoListServiceImpl implements TodoListService {
 
     // todo 전체검색
     @Override
-    public List<TodoList> searchAll() {
+    public List<TodoListDto> searchAll() {
         try {
             return todoListDao.searchAll();
         } catch (Exception e) {
@@ -126,9 +126,14 @@ public class TodoListServiceImpl implements TodoListService {
     @Override
     public void remove(Integer id) {
         try {
+        	TodoListDto existingTodoList = todoListDao.search(id);
+        	if(existingTodoList == null) {
+        		throw new TodoListException("삭제할 Todolist를 찾을 수 없습니다.");
+        	}
             todoListDao.remove(id);
         } catch (Exception e) {
             throw new TodoListException("TodoList 삭제 중 오류 발생: " + e.getMessage());
         }
     }
+    
 }
