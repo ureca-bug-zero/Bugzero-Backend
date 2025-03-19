@@ -1,8 +1,10 @@
 package com.uplus.bugzerobackend.service;
 
 import com.uplus.bugzerobackend.mapper.TodoListMapper;
+import com.uplus.bugzerobackend.mapper.UserMapper;
 import com.uplus.bugzerobackend.dto.TodoListDto;
 import com.uplus.bugzerobackend.TodoListException;
+import com.uplus.bugzerobackend.domain.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,37 +21,25 @@ public class TodoListServiceImpl implements TodoListService {
     public TodoListServiceImpl(TodoListMapper todoListDao) {
         this.todoListDao = todoListDao;
     }
-
-    // todo 등록
+    @Autowired
+    private UserMapper userMapper;
+    
+    //todo등록
     @Override
-    public void insert(TodoListDto todoList) {
-        try {
-            // 유저 정보 확인
-            if (todoList.getUser() == null || todoList.getUser().getId() == null) {
-                throw new TodoListException("유저 정보가 없습니다.");
-            }
-
-            // Long → Integer 변환 후 userId 설정
-            Integer userId = todoList.getUser().getId().intValue();
-            todoList.setUserId(userId); 
-
-            // 같은 유저가 같은 날짜, 같은 내용의 Todo를 추가했는지 검사
-            TodoListDto existingTodoList = todoListDao.searchByUserAndDateAndContent(
-                userId, // Integer 타입으로 전달
-                todoList.getDate(), 
-                todoList.getContent()
-            );
-
-            if (existingTodoList != null) {
-                throw new TodoListException("이미 존재하는 TodoList입니다.");
-            }
-
-            // 새로운 TodoList 저장
-            todoListDao.insert(todoList);
-        } catch (Exception e) {
-            e.printStackTrace(); 
-            throw new TodoListException("TodoList 추가 중 오류 발생: " + e.getMessage());
+    public void insert(TodoListDto todoListDto) {
+        if (todoListDto.getUserId() == null) {
+            throw new TodoListException("유저 정보가 없습니다.");
         }
+
+        // MyBatis를 사용해 유저 정보 조회
+        User user = userMapper.getUserById(todoListDto.getUserId());
+        if (user == null) {
+            throw new TodoListException("해당 userId를 가진 유저가 없습니다.");
+        }
+
+        // User 정보 설정
+        todoListDto.setUser(user);
+        todoListDao.insert(todoListDto);
     }
 
     // todo 수정
