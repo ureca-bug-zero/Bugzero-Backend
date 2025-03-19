@@ -6,9 +6,11 @@ import com.uplus.bugzerobackend.service.TodoListService;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -33,18 +35,21 @@ public class TodoListController {
         return ResponseEntity.ok("TodoList가 성공적으로 생성되었습니다.");
     }
 
-    // TodoList 조회
-    @GetMapping("/{id}")
-    public ResponseEntity<TodoListDto> getTodoList(@PathVariable Integer id) {
-        TodoListDto todoList = todoListService.search(id);
-        return ResponseEntity.ok(todoList);
-    }
+//    // TodoList 조회
+//    @GetMapping("/{id}")
+//    public ResponseEntity<TodoListDto> getTodoList(@PathVariable("id") Integer id) {
+//        TodoListDto todoList = todoListService.search(id);
+//        return ResponseEntity.ok(todoList);
+//    }
 
     // 모든 TodoList 조회
-    @GetMapping
-    public ResponseEntity<List<TodoListDto>> getAllTodoLists() {
-        List<TodoListDto> todoLists = todoListService.searchAll();
-        return ResponseEntity.ok(todoLists);
+    @GetMapping("/user/{id}")
+    public ResponseEntity<List<TodoListDto>> getAllTodoLists(
+        @PathVariable("id") Integer id,
+        @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+
+        List<TodoListDto> todoList = todoListService.searchAll(id, date);
+        return ResponseEntity.ok(todoList);
     }
 
     // TodoList 수정
