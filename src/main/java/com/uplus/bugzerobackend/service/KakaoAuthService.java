@@ -1,6 +1,7 @@
 package com.uplus.bugzerobackend.service;
 
 import com.uplus.bugzerobackend.dto.KakaoUserDto;
+import com.uplus.bugzerobackend.mapper.FriendMapper;
 import com.uplus.bugzerobackend.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,10 +17,12 @@ public class KakaoAuthService {
     private static final String KAKAO_USER_INFO_URL = "https://kapi.kakao.com/v2/user/me";
     
     private final UserMapper userMapper;
-
+    private final FriendMapper friendMapper;
+    
     @Autowired
-    public KakaoAuthService(UserMapper userMapper) {
+    public KakaoAuthService(UserMapper userMapper, FriendMapper friendMapper) {
         this.userMapper = userMapper;
+        this.friendMapper = friendMapper;
     }
 
     /**
@@ -68,7 +71,14 @@ public class KakaoAuthService {
         // 신규 회원 가입
         userMapper.insertUser(kakaoUser);
         System.out.println("신규 회원 가입 완료: " + kakaoUser.getEmail());
+        
+        // 신규 회원의 user_id 가져오기
+        KakaoUserDto newUser = userMapper.getUserByEmail(kakaoUser.getEmail());
+        System.out.println("신규 회원 ID: " + newUser.getId());
 
+        // 신규 회원의 친구 리스트 생성
+        friendMapper.insertFriendList(newUser.getId());
+        System.out.println("신규 회원의 친구 리스트 생성 완료");
         return kakaoUser;
     }
 }
