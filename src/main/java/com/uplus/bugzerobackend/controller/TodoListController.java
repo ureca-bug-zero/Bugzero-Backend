@@ -35,18 +35,18 @@ public class TodoListController {
         return ResponseEntity.ok("TodoList가 성공적으로 생성되었습니다.");
     }
 
-    // TodoList 조회
-    @GetMapping("/{id}")
-    public ResponseEntity<TodoListDto> getTodoList(@PathVariable("id") Integer id) {
-        TodoListDto todoList = todoListService.search(id);
-        return ResponseEntity.ok(todoList);
-    }
+//    // TodoList 조회
+//    @GetMapping("/{id}")
+//    public ResponseEntity<TodoListDto> getTodoList(@PathVariable("id") Integer id) {
+//        TodoListDto todoList = todoListService.search(id);
+//        return ResponseEntity.ok(todoList);
+//    }
 
     // 모든 TodoList 조회
     @GetMapping("/user/{id}")
     public ResponseEntity<List<TodoListDto>> getAllTodoLists(
-            @PathVariable("id") Integer id,
-            @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+        @PathVariable("id") Integer id,
+        @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
 
         List<TodoListDto> todoList = todoListService.searchAll(id, date);
         return ResponseEntity.ok(todoList);
