@@ -40,10 +40,10 @@ public class FriendRequestService {
     public void deleteFriendRequest(Integer receiverId, Integer senderId) {
         try {
             if (receiverId == null) {
-                throw new IllegalArgumentException("삭제할 친구 요청의 receiverId가 null입니다.");
+                throw new IllegalArgumentException("친구 요청 응답에 receiverId가 null입니다.");
             }
             if (senderId == null) {
-                throw new IllegalArgumentException("삭제할 친구 요청의 senderId가 null입니다.");
+                throw new IllegalArgumentException("친구 요청 응답에 senderId가 null입니다.");
             }
 
             FriendResponseDto friendResponseDto = new FriendResponseDto();
@@ -56,6 +56,25 @@ public class FriendRequestService {
         }
     }
 
+    public void updateFriendRequest(Integer receiverId, Integer senderId) {
+        if (receiverId == null) {
+            throw new IllegalArgumentException("친구 요청 응답에 receiverId가 null입니다.");
+        }
+        if (senderId == null) {
+            throw new IllegalArgumentException("친구 요청 응답에 senderId가 null입니다.");
+        }
+        FriendResponseDto friendResponseDto = new FriendResponseDto();
+
+        friendResponseDto.setReceiverId(receiverId);
+        friendResponseDto.setSenderId(senderId);
+
+        FriendResponseDto reverseDto = new FriendResponseDto();
+        reverseDto.setReceiverId(senderId);
+        reverseDto.setSenderId(receiverId);
+
+        friendRequestMapper.updateFriendList(friendResponseDto);
+        friendRequestMapper.updateFriendList(reverseDto);
+    }
 
 
 }

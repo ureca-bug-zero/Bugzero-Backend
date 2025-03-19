@@ -29,6 +29,18 @@ public class FriendRequestController {
             @RequestParam Integer receiverId, @RequestParam Integer senderId) {
         friendRequestService.deleteFriendRequest(receiverId, senderId);
 
-        return ResponseEntity.ok(ApiResponseDto.success("친구 요청을 거절하였습니다.", null));
+        return ResponseEntity.ok(ApiResponseDto.success("친구 요청 거절에 성공하였습니다.", null));
+    }
+
+    @PostMapping("/response/accept")
+    public ResponseEntity<ApiResponseDto<Void>> acceptFriendRequests(
+            @RequestParam Integer receiverId, @RequestParam Integer senderId) {
+        friendRequestService.updateFriendRequest(receiverId, senderId);
+        try {
+            friendRequestService.deleteFriendRequest(receiverId, senderId);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalStateException("친구 수락 후 friendRequest DB 업데이트에 실패하였습니다.");
+        }
+        return ResponseEntity.ok(ApiResponseDto.success("친구 요청 수락에 성공하였습니다.", null));
     }
 }
