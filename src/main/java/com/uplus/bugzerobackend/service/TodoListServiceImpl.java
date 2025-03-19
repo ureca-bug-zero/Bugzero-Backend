@@ -9,6 +9,7 @@ import com.uplus.bugzerobackend.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 
@@ -76,10 +77,10 @@ public class TodoListServiceImpl implements TodoListService {
 
     // 특정 유저의 todo 전체검색
     @Override
-    public List<TodoListDto> searchAll(Integer id) {
-        List<TodoListDto> todoList = todoListDao.searchAll(id);
-        
-        // 빈 리스트 반환 (예외 던지지 않음)
+    public List<TodoListDto> searchAll(Integer userId, LocalDate date) {
+        List<TodoListDto> todoList = todoListDao.searchAll(userId, date);
+
+        // 결과가 null이면 빈 리스트 반환 (예외 발생 X)
         return todoList != null ? todoList : Collections.emptyList();
     }
 

@@ -11,7 +11,8 @@ public interface TodoListMapper {
     void insert(TodoListDto todoList);  					 // TodoList 추가
     void update(TodoListDto todoList); 						 // TodoList 수정
     TodoListDto search(Integer id);       					 // TodoList 조회
-    List<TodoListDto> searchAll(@Param("userId") Integer id);// 모든 TodoList 조회
+    List<TodoListDto> searchAll(@Param("userId") Integer userId, @Param("date") LocalDate date);
+// 모든 TodoList 조회
     void remove(Integer id);           						 // TodoList 삭제
 
     // 같은 유저가 같은 날짜, 같은 내용의 Todo를 추가했는지 확인
