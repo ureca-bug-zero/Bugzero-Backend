@@ -52,8 +52,8 @@
 	        id, 
 	        date, 
 	        content, 
-	        is_mission, 
-	        is_checked, 
+	        is_mission As isMission, 
+	        is_checked AS isChecked, 
 	        link, 
 	        user_id AS userId 
 	    FROM todo_list
