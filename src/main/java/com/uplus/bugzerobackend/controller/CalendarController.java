@@ -46,7 +46,6 @@ public class   CalendarController {
     public ResponseEntity<Map<String, Object>> getDailyTodoStatus(HttpServletRequest request, @RequestBody CalendarRequestDto calendarRequestDto) {
         Integer userId = jwtTokenService.getUserId(request);
         List<TodoListDto> todoLists = todoListService.searchAll(userId, calendarRequestDto.getDate());
-
         Map<String, Object> response = calendarService.processDaily(todoLists, calendarRequestDto);
         return ResponseEntity.ok(response);
     }

@@ -12,6 +12,7 @@ import lombok.Setter;
 public class CalendarRequestDto {
     private String yearMonth;    // "2025-01" 형식
 
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate date;      // "2025-01-01" 형식
 }
