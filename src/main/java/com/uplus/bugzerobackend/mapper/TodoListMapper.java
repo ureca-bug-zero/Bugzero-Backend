@@ -3,12 +3,16 @@ package com.uplus.bugzerobackend.mapper;
 import com.uplus.bugzerobackend.dto.TodoListDto;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
+
+import com.uplus.bugzerobackend.dto.TodoListPostDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface TodoListMapper {
     void insert(TodoListDto todoList);  					 // TodoList 추가
+    void newTodoList(Map<String, Object> todoMap);
     void update(TodoListDto todoList); 						 // TodoList 수정
     TodoListDto search(Integer id);       					 // TodoList 조회
     List<TodoListDto> searchAll(@Param("userId") Integer userId, @Param("date") LocalDate date); // 모든 TodoList 조회

@@ -1,5 +1,6 @@
 package com.uplus.bugzerobackend.service;
 
+import com.uplus.bugzerobackend.dto.TodoListPostDto;
 import com.uplus.bugzerobackend.mapper.TodoListMapper;
 import com.uplus.bugzerobackend.mapper.UserMapper;
 import com.uplus.bugzerobackend.dto.TodoListDto;
@@ -11,10 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
 import java.time.LocalDate;
-import java.util.Collections;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 @Service 
 public class TodoListServiceImpl implements TodoListService {
@@ -46,6 +46,28 @@ public class TodoListServiceImpl implements TodoListService {
         // User 정보 설정
         todoListDto.setUser(user);
         todoListDao.insert(todoListDto);
+    }
+
+    @Override
+    public Integer newTodoList(Integer userId, TodoListPostDto todoListPostDto) {
+        try {
+            if(userId == null) {
+                throw new EntityNotFoundException("userId가 없습니다.");
+            }
+            Map<String, Object> todoMap = new HashMap<>();
+            todoMap.put("userId", userId);
+            todoMap.put("date", todoListPostDto.getDate());
+            todoMap.put("content", todoListPostDto.getContent());
+            todoMap.put("link", todoListPostDto.getLink());
+            todoListMapper.newTodoList(todoMap);
+
+            Object getId = todoMap.get("id");
+            BigInteger big = new BigInteger(String.valueOf(getId));
+            Integer todoId = big.intValue();
+            return todoId;
+        } catch(Exception e) {
+            throw new IllegalStateException("TodoList 추가 중 오류 발생: " + e.getMessage());
+        }
     }
 
     // todo 수정
