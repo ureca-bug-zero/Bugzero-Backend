@@ -11,6 +11,7 @@ import org.apache.ibatis.annotations.Select;
 @Mapper
 public interface FriendMapper {
     Friend getFriendById(int userId);
+    int checkFriendExistence(Map<String, Object> params);
     void deleteFriend(Map<String, Object> params);
     void insertFriendList(@Param("userId") int userId);
 }

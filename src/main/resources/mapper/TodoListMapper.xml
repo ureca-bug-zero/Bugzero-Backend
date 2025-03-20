@@ -9,7 +9,7 @@
 
 	<insert id="insert" parameterType="com.uplus.bugzerobackend.dto.TodoListDto" useGeneratedKeys="true" keyProperty="id">
 	    INSERT INTO todo_list (date, content, is_mission, is_checked, link, user_id)
-	    VALUES (#{date}, #{content}, #{isMission}, #{isChecked}, #{link}, #{userId}) 
+	    VALUES (#{date}, #{content}, #{mission}, #{checked}, #{link}, #{userId}) 
 	</insert>
 
 
@@ -30,6 +30,17 @@
         AND content = #{content}
     </select>
 
+	<select id="findByUserIdAndYearMonth" resultType="com.uplus.bugzerobackend.dto.TodoListDto">
+	    SELECT user_id AS userId,
+           date,
+           content,
+           is_mission As mission, 
+	        is_checked AS checked
+	    FROM todo_list
+	    WHERE user_id = #{userId}
+	    AND DATE_FORMAT(date, '%Y-%m') = #{yearMonth}
+	</select>
+	
 	<!-- User를 userId로 조회하는 쿼리 
     <select id="findUserById" resultType="com.uplus.bugzerobackend.todo.model.dto.User">
         SELECT *
@@ -50,20 +61,31 @@
 	        id, 
 	        date, 
 	        content, 
-	        is_mission As isMission, 
-	        is_checked AS isChecked, 
+	        is_mission As mission, 
+	        is_checked AS checked, 
 	        link, 
 	        user_id AS userId 
 	    FROM todo_list
 	    WHERE user_id = #{userId}
 	    AND date = #{date}
 	</select>
-
+   <!-- 검색 시 유저 정보가 DB에 있는지 먼저 확인 -->
+   <select id="existsByUserId" resultType="boolean">
+       SELECT COUNT(*) > 0
+       FROM user
+       WHERE id = #{userId}
+   </select>
 
     <!-- TodoList 삭제 -->
     <delete id="remove" parameterType="int">
         DELETE FROM todo_list WHERE id = #{id}
     </delete>
+
+	<update id="checkTodoList" parameterType="int">
+		UPDATE todo_list
+		SET is_checked = NOT is_checked
+		WHERE id = #{id};
+	</update>
     
 
 </mapper>
