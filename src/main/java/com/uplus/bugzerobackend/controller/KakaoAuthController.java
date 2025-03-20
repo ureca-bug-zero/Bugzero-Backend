@@ -1,5 +1,6 @@
 package com.uplus.bugzerobackend.controller;
 
+import com.uplus.bugzerobackend.dto.ApiResponseDto;
 import com.uplus.bugzerobackend.dto.KakaoUserDto;
 import com.uplus.bugzerobackend.service.KakaoAuthService;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ public class KakaoAuthController {
      // 카카오 회원가입 및 로그인 (Access Token 사용)
 
     @PostMapping("/kakao/signup")
-    public ResponseEntity<KakaoUserDto> kakaoSignup(@RequestBody Map<String, String> requestBody) {
+    public ResponseEntity<ApiResponseDto<KakaoUserDto>> kakaoSignup(@RequestBody Map<String, String> requestBody) {
         String authorizationCode = requestBody.get("authorizationCode");
         if (authorizationCode == null || authorizationCode.isEmpty()) {
             throw new IllegalArgumentException("Authorization code가 필요합니다.");
@@ -28,6 +29,6 @@ public class KakaoAuthController {
 
         // API 한개로 처리
         KakaoUserDto user = kakaoAuthService.registerOrLoginWithCode(authorizationCode);
-        return ResponseEntity.ok(user);
+        return ResponseEntity.ok(ApiResponseDto.success("User 조회를 성공하였습니다.", user));
     }
 }

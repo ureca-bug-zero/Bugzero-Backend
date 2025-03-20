@@ -14,9 +14,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @RestController
-@RequestMapping("/api/todolists")
+@RequestMapping("/todolist")
 //@Slf4j
 public class TodoListController {
 
@@ -30,11 +31,12 @@ public class TodoListController {
 
     // TodoList 추가
     @PostMapping
-    public ResponseEntity<String> createTodoList(@RequestBody TodoListDto todoList) {
+    public ResponseEntity<ApiResponseDto<Map<String, Integer>>> createTodoList(@RequestBody TodoListDto todoList) {
 //    	log.debug("createTodoList todoList:{}", todoList);
     	System.out.println("todoList:"+todoList);
         todoListService.insert(todoList);
-        return ResponseEntity.ok("TodoList가 성공적으로 생성되었습니다.");
+
+        return ResponseEntity.ok(ApiResponseDto.success("TodoList가 성공적으로 생성되었습니다.", Map.of("id", todoList.getId())));
     }
 
 //    // TodoList 조회
@@ -46,26 +48,26 @@ public class TodoListController {
 
     // 모든 TodoList 조회
     @GetMapping("/user/{id}")
-    public ResponseEntity<List<TodoListDto>> getAllTodoLists(
+    public ResponseEntity<ApiResponseDto<List<TodoListDto>>> getAllTodoLists(
         @PathVariable("id") Integer id,
         @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
 
         List<TodoListDto> todoList = todoListService.searchAll(id, date);
-        return ResponseEntity.ok(todoList);
+        return ResponseEntity.ok(ApiResponseDto.success("Todo List 조회를 성공하였습니다.",todoList));
     }
 
     // TodoList 수정
     @PatchMapping("/{id}")
-    public ResponseEntity<String> updateTodoList(@PathVariable("id") Integer id, @RequestBody TodoListUpdateDto updateDto) {
+    public ResponseEntity<ApiResponseDto<Void>> updateTodoList(@PathVariable("id") Integer id, @RequestBody TodoListUpdateDto updateDto) {
     	todoListService.update(id, updateDto);
-        return ResponseEntity.ok("TodoList가 성공적으로 수정되었습니다.");
+        return ResponseEntity.ok(ApiResponseDto.success("TodoList가 성공적으로 수정되었습니다.", null));
     }
 
     // TodoList 삭제
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteTodoList(@PathVariable("id") Integer id) {
+    public ResponseEntity<ApiResponseDto<Void>> deleteTodoList(@PathVariable("id") Integer id) {
         todoListService.remove(id);
-        return ResponseEntity.ok("TodoList가 성공적으로 삭제되었습니다.");
+        return ResponseEntity.ok(ApiResponseDto.success("TodoList가 성공적으로 삭제되었습니다.", null));
     }
 
     @PostMapping("/check/{id}")
