@@ -64,6 +64,12 @@
     <delete id="remove" parameterType="int">
         DELETE FROM todo_list WHERE id = #{id}
     </delete>
+
+	<update id="checkTodoList" parameterType="int">
+		UPDATE todo_list
+		SET is_checked = NOT is_checked
+		WHERE id = #{id};
+	</update>
     
 
 </mapper>
