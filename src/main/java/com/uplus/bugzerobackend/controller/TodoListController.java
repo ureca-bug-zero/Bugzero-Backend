@@ -63,7 +63,7 @@ public class TodoListController {
 //    }
 
     // 모든 TodoList 조회
-    @GetMapping("/all")
+    @GetMapping("/get")
     public ResponseEntity<ApiResponseDto<List<TodoListDto>>> getAllTodoLists(
             HttpServletRequest request,
             @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
@@ -87,8 +87,9 @@ public class TodoListController {
     }
 
     @PostMapping("/check/{id}")
-    public ResponseEntity<ApiResponseDto<Void>> checkTodoList(@PathVariable("id") Integer id) {
-        todoListService.checkTodoList(id);
-        return ResponseEntity.ok(ApiResponseDto.success("투두 리스트 체크를 성공하였습니다.", null));
+    public ResponseEntity<ApiResponseDto<Map<LocalDate, Double>>> checkTodoList(@PathVariable("id") Integer id) {
+        Double percentage = todoListService.checkTodoList(id);
+        LocalDate date = todoListService.getDate(id);
+        return ResponseEntity.ok(ApiResponseDto.success("투두 리스트 체크 및 달성률 반환를 성공하였습니다.", Map.of(date, percentage)));
     }
 }
