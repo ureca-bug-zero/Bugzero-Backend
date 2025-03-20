@@ -1,5 +1,6 @@
 package com.uplus.bugzerobackend.controller;
 
+import com.uplus.bugzerobackend.dto.ApiResponseDto;
 import com.uplus.bugzerobackend.dto.TodoListDto;
 import com.uplus.bugzerobackend.dto.TodoListUpdateDto;
 import com.uplus.bugzerobackend.service.TodoListService;
@@ -65,5 +66,11 @@ public class TodoListController {
     public ResponseEntity<String> deleteTodoList(@PathVariable("id") Integer id) {
         todoListService.remove(id);
         return ResponseEntity.ok("TodoList가 성공적으로 삭제되었습니다.");
+    }
+
+    @PostMapping("/check/{id}")
+    public ResponseEntity<ApiResponseDto<Void>> checkTodoList(@PathVariable("id") Integer id) {
+        todoListService.checkTodoList(id);
+        return ResponseEntity.ok(ApiResponseDto.success("투두 리스트 체크를 성공하였습니다.", null));
     }
 }

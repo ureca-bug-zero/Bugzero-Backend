@@ -8,6 +8,7 @@ import com.uplus.bugzerobackend.TodoListException;
 import com.uplus.bugzerobackend.domain.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -18,6 +19,8 @@ import java.util.List;
 public class TodoListServiceImpl implements TodoListService {
 
     private final TodoListMapper todoListDao;
+    @Autowired
+    private TodoListMapper todoListMapper;
 
     @Autowired
     public TodoListServiceImpl(TodoListMapper todoListDao) {
@@ -104,6 +107,15 @@ public class TodoListServiceImpl implements TodoListService {
             todoListDao.remove(id);
         } catch (Exception e) {
             throw new TodoListException("TodoList 삭제 중 오류 발생: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public void checkTodoList(Integer id) {
+        try {
+            todoListMapper.checkTodoList(id);
+        } catch(DataAccessException e){
+            throw new IllegalStateException("체크리스트 처리 중 오류가 발생하였습니다.");
         }
     }
     
