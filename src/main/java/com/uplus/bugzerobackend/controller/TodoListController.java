@@ -35,13 +35,23 @@ public class TodoListController {
 //    }
 
     // TodoList 추가
-    @PostMapping
-    public ResponseEntity<ApiResponseDto<Map<String, Integer>>> createTodoList(@RequestBody TodoListDto todoList) {
-//    	log.debug("createTodoList todoList:{}", todoList);
-        System.out.println("todoList:" + todoList);
-        todoListService.insert(todoList);
+//    @PostMapping
+//    public ResponseEntity<ApiResponseDto<Map<String, Integer>>> createTodoList(@RequestBody TodoListDto todoList) {
+////    	log.debug("createTodoList todoList:{}", todoList);
+//    	System.out.println("todoList:"+todoList);
+//        todoListService.insert(todoList);
+//
+//        return ResponseEntity.ok(ApiResponseDto.success("TodoList가 성공적으로 생성되었습니다.", Map.of("id", todoList.getId())));
+//    }
 
-        return ResponseEntity.ok(ApiResponseDto.success("TodoList가 성공적으로 생성되었습니다.", Map.of("id", todoList.getId())));
+    @PostMapping("/new")
+    public ResponseEntity<ApiResponseDto<Map<String, Integer>>> createTodoList(HttpServletRequest request, @RequestBody TodoListPostDto todoListPostDto) {
+//    	log.debug("createTodoList todoList:{}", todoList);
+//        System.out.println("todoList:"+todoList);
+        Integer userId = jwtTokenService.getUserId(request);
+        Integer todoId = todoListService.newTodoList(userId, todoListPostDto);
+
+        return ResponseEntity.ok(ApiResponseDto.success("TodoList가 성공적으로 생성되었습니다.", Map.of("id", todoId)));
     }
 
 //    // TodoList 조회
@@ -64,7 +74,7 @@ public class TodoListController {
     // TodoList 수정
     @PatchMapping("/{id}")
     public ResponseEntity<ApiResponseDto<Void>> updateTodoList(@PathVariable("id") Integer id, @RequestBody TodoListUpdateDto updateDto) {
-    	todoListService.update(id, updateDto);
+        todoListService.update(id, updateDto);
         return ResponseEntity.ok(ApiResponseDto.success("TodoList가 성공적으로 수정되었습니다.", null));
     }
 
