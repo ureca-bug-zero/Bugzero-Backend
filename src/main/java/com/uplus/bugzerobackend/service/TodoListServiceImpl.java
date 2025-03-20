@@ -24,11 +24,14 @@ public class TodoListServiceImpl implements TodoListService {
     private TodoListMapper todoListMapper;
 
     @Autowired
-    public TodoListServiceImpl(TodoListMapper todoListDao) {
+    public TodoListServiceImpl(TodoListMapper todoListDao, CalendarService calendarService) {
         this.todoListDao = todoListDao;
+        this.calendarService = calendarService;
     }
     @Autowired
     private UserMapper userMapper;
+
+    private final CalendarService calendarService;
     
     //todo등록
     @Override
@@ -150,12 +153,32 @@ public class TodoListServiceImpl implements TodoListService {
     }
 
     @Override
-    public void checkTodoList(Integer id) {
+    public Double checkTodoList(Integer id) {
         try {
+            TodoListDto todo = todoListMapper.search(id);
+            if (todo == null) {
+                throw new EntityNotFoundException("해당 ID의 TodoList가 없습니다.");
+            }
+
             todoListMapper.checkTodoList(id);
-        } catch(DataAccessException e){
+
+            List<TodoListDto> todoLists = todoListMapper.searchAll(todo.getUserId(), todo.getDate());
+
+            // 달성률 계산
+            Map<Integer, Double> progressMap = calendarService.processProgress(todoLists);
+            double progress = progressMap.getOrDefault(todo.getDate().getDayOfMonth(), 0.0);
+
+            return Math.round(progress * 100.0) / 100.0;
+        } catch (DataAccessException e) {
             throw new IllegalStateException("체크리스트 처리 중 오류가 발생하였습니다.");
         }
+    }
+
+    @Override
+    public LocalDate getDate(Integer id) {
+        LocalDate date = todoListMapper.getDateById(id);
+
+        return date;
     }
     
 }

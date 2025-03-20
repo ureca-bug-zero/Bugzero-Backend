@@ -18,6 +18,7 @@ public interface TodoListMapper {
     List<TodoListDto> searchAll(@Param("userId") Integer userId, @Param("date") LocalDate date); // 모든 TodoList 조회
     void remove(Integer id);           						 // TodoList 삭제
     List<TodoListDto> findByUserIdAndYearMonth(@Param("userId") Integer userId, @Param("yearMonth") String yearMonth); //년-월별 투두조회
+    LocalDate getDateById(Integer id);
 
     // 같은 유저가 같은 날짜, 같은 내용의 Todo를 추가했는지 확인
     TodoListDto searchByUserAndDateAndContent(

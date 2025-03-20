@@ -89,6 +89,12 @@
 		SET is_checked = NOT is_checked
 		WHERE id = #{id};
 	</update>
+
+	<select id="getDateById" parameterType="int" resultType="java.time.LocalDate">
+		SELECT date
+		FROM todo_list
+		WHERE id = #{id}
+	</select>
     
 
 </mapper>
