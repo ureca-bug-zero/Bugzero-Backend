@@ -15,6 +15,13 @@
         FROM friend
         WHERE user_id = #{userId}
     </select>
+    
+    <update id="deleteFriend" parameterType="map">
+		UPDATE friend
+		SET friendList = JSON_REMOVE(friendList, 
+			JSON_UNQUOTE(JSON_SEARCH(friendList, 'one', #{friendId}, nULL, '$[*].friendId')))
+		WHERE user_id = #{userId}
+	</update>
 
 	<!-- 새로 가입한 유저의 친구 리스트 생성 -->
 	<insert id="insertFriendList" parameterType="int">
