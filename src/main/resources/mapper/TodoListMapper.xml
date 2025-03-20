@@ -30,6 +30,17 @@
         AND content = #{content}
     </select>
 
+	<select id="findByUserIdAndYearMonth" resultType="com.uplus.bugzerobackend.dto.TodoListDto">
+	    SELECT user_id AS userId,
+           date,
+           content,
+           is_mission As mission, 
+	        is_checked AS checked
+	    FROM todo_list
+	    WHERE user_id = #{userId}
+	    AND DATE_FORMAT(date, '%Y-%m') = #{yearMonth}
+	</select>
+	
 	<!-- User를 userId로 조회하는 쿼리 
     <select id="findUserById" resultType="com.uplus.bugzerobackend.todo.model.dto.User">
         SELECT *
