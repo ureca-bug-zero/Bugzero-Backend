@@ -45,10 +45,15 @@ public class FriendService {
     }
     
 	public void deleteFriend(int userId, int friendId) {
-		Map<String, Object> params = new HashMap<>();
-	    params.put("userId", userId);
-	    params.put("friendId", friendId);
+		Map<String, Object> rParams = new HashMap<>();
+		rParams.put("userId", userId);
+		rParams.put("friendId", friendId);
+		
+		Map<String, Object> sParams = new HashMap<>();
+		sParams.put("userId", friendId);
+		sParams.put("friendId", userId);
 	    
-	    friendMapper.deleteFriend(params);
+	    friendMapper.deleteFriend(rParams);
+	    friendMapper.deleteFriend(sParams);
 	}
 }
