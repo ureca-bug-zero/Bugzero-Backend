@@ -23,4 +23,5 @@ public interface TodoListMapper {
     );
 
     void checkTodoList(Integer id);
+    boolean existsByUserId(@Param("userId") Integer userId);
 }
