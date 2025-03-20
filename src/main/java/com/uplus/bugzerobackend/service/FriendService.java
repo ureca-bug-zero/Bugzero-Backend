@@ -7,10 +7,13 @@ import com.uplus.bugzerobackend.domain.User;
 import com.uplus.bugzerobackend.dto.FriendListDto;
 import com.uplus.bugzerobackend.mapper.FriendMapper;
 import com.uplus.bugzerobackend.mapper.UserMapper;
+
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class FriendService {
@@ -40,4 +43,12 @@ public class FriendService {
         }
         return response;
     }
+    
+	public void deleteFriend(int userId, int friendId) {
+		Map<String, Object> params = new HashMap<>();
+	    params.put("userId", userId);
+	    params.put("friendId", friendId);
+	    
+	    friendMapper.deleteFriend(params);
+	}
 }
