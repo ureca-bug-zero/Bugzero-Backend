@@ -42,12 +42,12 @@ public class   CalendarController {
 
 
     // 특정 날짜 투두 달성 개수 조회
-    @PostMapping("/daily")
-    public ResponseEntity<Map<String, Object>> getDailyTodoStatus(HttpServletRequest request, @RequestBody CalendarRequestDto calendarRequestDto) {
-        Integer userId = jwtTokenService.getUserId(request);
-        List<TodoListDto> todoLists = todoListService.searchAll(userId, calendarRequestDto.getDate());
-        Map<String, Object> response = calendarService.processDaily(todoLists, calendarRequestDto);
-        return ResponseEntity.ok(response);
-    }
+//    @PostMapping("/daily")
+//    public ResponseEntity<Map<String, Object>> getDailyTodoStatus(HttpServletRequest request, @RequestBody CalendarRequestDto calendarRequestDto) {
+//        Integer userId = jwtTokenService.getUserId(request);
+//        List<TodoListDto> todoLists = todoListService.searchAll(userId, calendarRequestDto.getDate());
+//        Map<String, Object> response = calendarService.processDaily(todoLists, calendarRequestDto);
+//        return ResponseEntity.ok(response);
+//    }
 
 }
