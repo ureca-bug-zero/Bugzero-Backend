@@ -18,13 +18,13 @@
     
     <update id="deleteFriend" parameterType="map">
 		UPDATE friend
-		SET friendList = JSON_REMOVE(friendList, 
-			JSON_UNQUOTE(JSON_SEARCH(friendList, 'one', #{friendId}, nULL, '$[*].friendId')))
+		SET friend_list = JSON_REMOVE(friend_list,
+			JSON_UNQUOTE(JSON_SEARCH(friend_list, 'one', #{friendId}, null, '$[*].friendId')))
 		WHERE user_id = #{userId}
 	</update>
 
 	<!-- 새로 가입한 유저의 친구 리스트 생성 -->
 	<insert id="insertFriendList" parameterType="int">
-        INSERT INTO friend (user_id, friendList) VALUES (#{userId}, '[]')
+        INSERT INTO friend (user_id, friend_list) VALUES (#{userId}, '[]')
     </insert>
 </mapper>
