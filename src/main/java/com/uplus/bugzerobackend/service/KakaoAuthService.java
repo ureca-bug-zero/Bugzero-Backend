@@ -20,6 +20,7 @@ public class KakaoAuthService {
 
     private static final String KAKAO_TOKEN_URL = "https://kauth.kakao.com/oauth/token";
     private static final String KAKAO_USER_INFO_URL = "https://kapi.kakao.com/v2/user/me";
+    private static final String KAKAO_LOGIN_URL = "https://kauth.kakao.com/oauth/authorize";
 
     @Value("${kakao.client-id}")
     private String clientId;
@@ -32,11 +33,21 @@ public class KakaoAuthService {
 
     private final UserMapper userMapper;
     private final FriendMapper friendMapper;
+    private final JwtTokenService jwtTokenService;
 
     @Autowired
-    public KakaoAuthService(UserMapper userMapper, FriendMapper friendMapper) {
+    public KakaoAuthService(UserMapper userMapper, FriendMapper friendMapper, JwtTokenService jwtTokenService) {
         this.userMapper = userMapper;
         this.friendMapper = friendMapper;
+        this.jwtTokenService = jwtTokenService;
+    }
+
+
+    /**
+     * 카카오 로그인 URL 반환
+     */
+    public String getKakaoLoginUrl() {
+        return KAKAO_LOGIN_URL + "?client_id=" + clientId + "&redirect_uri=" + redirectUri + "&response_type=code";
     }
 
     /**
@@ -116,6 +127,6 @@ public class KakaoAuthService {
         friendMapper.insertFriendList(newUser.getId());
         System.out.println("신규 회원의 친구 리스트 생성 완료");
 
-        return newUser;
+        return newUser; // 새로 가입한 회원 정보 반환
     }
 }
