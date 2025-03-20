@@ -16,7 +16,7 @@ import com.uplus.bugzerobackend.dto.TodoListDto;
 public class CalendarService {
 
     // 공통 진행률 계산 함수
-    private Map<Integer, Double> processProgress(List<TodoListDto> todoLists) {
+    public Map<Integer, Double> processProgress(List<TodoListDto> todoLists) {
         Map<Integer, Double> scoreMap = new HashMap<>();
         Map<Integer, Double> totalScoreMap = new HashMap<>();
 
