@@ -4,6 +4,7 @@ import com.uplus.bugzerobackend.dto.KakaoUserDto;
 import com.uplus.bugzerobackend.service.KakaoAuthService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
@@ -15,12 +16,18 @@ public class KakaoAuthController {
         this.kakaoAuthService = kakaoAuthService;
     }
 
-    /**
-     * 카카오 회원가입 및 로그인 (Access Token 사용)
-     */
+    
+     // 카카오 회원가입 및 로그인 (Access Token 사용)
+
     @PostMapping("/kakao/signup")
-    public ResponseEntity<KakaoUserDto> kakaoSignup(@RequestParam("accessToken") String accessToken) {
-        KakaoUserDto user = kakaoAuthService.registerOrLogin(accessToken);
+    public ResponseEntity<KakaoUserDto> kakaoSignup(@RequestBody Map<String, String> requestBody) {
+        String authorizationCode = requestBody.get("authorizationCode");
+        if (authorizationCode == null || authorizationCode.isEmpty()) {
+            throw new IllegalArgumentException("Authorization code가 필요합니다.");
+        }
+
+        // API 한개로 처리
+        KakaoUserDto user = kakaoAuthService.registerOrLoginWithCode(authorizationCode);
         return ResponseEntity.ok(user);
     }
 }
