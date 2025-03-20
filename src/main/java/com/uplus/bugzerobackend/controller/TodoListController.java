@@ -2,6 +2,7 @@ package com.uplus.bugzerobackend.controller;
 
 import com.uplus.bugzerobackend.dto.ApiResponseDto;
 import com.uplus.bugzerobackend.dto.TodoListDto;
+import com.uplus.bugzerobackend.dto.TodoListPostDto;
 import com.uplus.bugzerobackend.dto.TodoListUpdateDto;
 import com.uplus.bugzerobackend.service.JwtTokenService;
 import com.uplus.bugzerobackend.service.TodoListService;
@@ -62,7 +63,7 @@ public class TodoListController {
 //    }
 
     // 모든 TodoList 조회
-    @GetMapping("/user/{userId}")
+    @GetMapping("/all")
     public ResponseEntity<ApiResponseDto<List<TodoListDto>>> getAllTodoLists(
             HttpServletRequest request,
             @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
