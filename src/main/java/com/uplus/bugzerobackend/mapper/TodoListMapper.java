@@ -21,5 +21,6 @@ public interface TodoListMapper {
         @Param("date") LocalDate date, 
         @Param("content") String content
     );
-    
+
+    void checkTodoList(Integer id);
 }
