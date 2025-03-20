@@ -47,12 +47,12 @@ public class TodoListController {
 //    }
 
     // 모든 TodoList 조회
-    @GetMapping("/user/{id}")
+    @GetMapping("/user/{userId}")
     public ResponseEntity<ApiResponseDto<List<TodoListDto>>> getAllTodoLists(
-        @PathVariable("id") Integer id,
+        @PathVariable("userId") Integer userId,
         @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
 
-        List<TodoListDto> todoList = todoListService.searchAll(id, date);
+        List<TodoListDto> todoList = todoListService.searchAll(userId, date);
         return ResponseEntity.ok(ApiResponseDto.success("Todo List 조회를 성공하였습니다.",todoList));
     }
 
