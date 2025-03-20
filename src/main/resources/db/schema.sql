@@ -2,14 +2,14 @@ CREATE TABLE IF NOT EXISTS `user` (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
-    weekScore INT NOT NULL,
+    week_score INT NOT NULL,
     `rank` INT NOT NULL
     );
 
 CREATE TABLE IF NOT EXISTS friend (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
-    friendList JSON NOT NULL,
+    friend_list JSON NOT NULL,
     FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
     );
 
@@ -17,8 +17,8 @@ CREATE TABLE IF NOT EXISTS todo_list (
     id INT AUTO_INCREMENT PRIMARY KEY,
     date DATE NOT NULL,
     content VARCHAR(255) NOT NULL,
-    isMission BOOLEAN NOT NULL,
-    isChecked BOOLEAN NOT NULL,
+    is_mission BOOLEAN NOT NULL,
+    is_checked BOOLEAN NOT NULL,
     link VARCHAR(512),
     user_id INT NOT NULL,
     FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
