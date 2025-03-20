@@ -1,19 +1,26 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
 <mapper namespace="com.uplus.bugzerobackend.mapper.FriendMapper">
+    
     <resultMap id="FriendResultMap" type="com.uplus.bugzerobackend.domain.Friend">
         <id column="id" property="id"/>
         <result column="user_id" property="userId"/>
         <result column="friend_list" property="friendList" typeHandler="com.uplus.bugzerobackend.converter.JsonTypeHandler"/>
     </resultMap>
-
+	
 	<!-- 특정 유저의 친구 리스트 조회 -->
     <select id="getFriendById" parameterType="int" resultMap="FriendResultMap">
         SELECT id, user_id, friend_list
         FROM friend
         WHERE user_id = #{userId}
+    </select>
+    
+    <select id="checkFriendExistence" resultType="int">
+    	SELECT COUNT(*)
+    	FROM friend
+    	WHERE user_id = #{userId}
+    	AND JSON_CONTAINS(CAST(friend_list AS JSON), JSON_ARRAY(#{friendId}), '$');
     </select>
     
     <update id="deleteFriend" parameterType="map">
@@ -29,7 +36,6 @@
     	)
     	WHERE user_id = #{userId};
     </update>
-
 	<!-- 새로 가입한 유저의 친구 리스트 생성 -->
 	<insert id="insertFriendList" parameterType="int">
         INSERT INTO friend (user_id, friend_list) VALUES (#{userId}, '[]')
