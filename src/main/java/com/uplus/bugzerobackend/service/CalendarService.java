@@ -33,6 +33,7 @@ public class CalendarService {
         for (int day : totalScoreMap.keySet()) {
             double total = totalScoreMap.get(day);
             double progress = (total > 0) ? (scoreMap.getOrDefault(day, 0.0) / total) * 100 : 0.0;
+            progress = Math.round(progress * 100.0) / 100.0;
             progressMap.put(day, progress);
         }
 
@@ -42,7 +43,6 @@ public class CalendarService {
     // 년-월별 투두 진행률 계산
     public Map<String, Object> processMonthly(List<TodoListDto> todoLists, CalendarRequestDto request) {
         System.out.println("=== [디버깅] 요청 정보 ===");
-        System.out.println("userId: " + request.getUserId());
         System.out.println("yearMonth: " + request.getYearMonth());
 
         Map<Integer, Double> progressMap = processProgress(todoLists);
@@ -62,7 +62,6 @@ public class CalendarService {
         System.out.println("progressMap: " + fullProgressMap);
 
         Map<String, Object> response = new HashMap<>();
-        response.put("userId", request.getUserId());
         response.put("score", fullProgressMap);
 
         return response;
@@ -70,24 +69,23 @@ public class CalendarService {
 
 
     // 특정 날짜 투두 진행률 계산
-    public Map<String, Object> processDaily(List<TodoListDto> todoLists, CalendarRequestDto request) {
-        System.out.println("=== [디버깅] 요청 정보 ===");
-        System.out.println("userId: " + request.getUserId());
-        System.out.println("date: " + request.getDate());
-
-        Map<Integer, Double> progressMap = processProgress(todoLists);
-        int day = request.getDate().getDayOfMonth();
-        double score = progressMap.getOrDefault(day, 0.0);
-
-        System.out.println("\n=== [디버깅] 특정 날짜 진행률 ===");
-        System.out.println("progressMap: " + progressMap);
-        System.out.println("score: " + score);
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("userId", request.getUserId());
-        response.put("date", request.getDate());
-        response.put("score", score);
-
-        return response;
-    }
+//    public Map<String, Object> processDaily(List<TodoListDto> todoLists, CalendarRequestDto request) {
+//        System.out.println("=== [디버깅] 요청 정보 ===");
+//        System.out.println("date: " + request.getDate());
+//
+//        Map<Integer, Double> progressMap = processProgress(todoLists);
+//        int day = request.getDate().getDayOfMonth();
+//        double score = progressMap.getOrDefault(day, 0.0);
+//        score = Math.round(score * 100.0) / 100.0;
+//
+//        System.out.println("\n=== [디버깅] 특정 날짜 진행률 ===");
+//        System.out.println("progressMap: " + progressMap);
+//        System.out.println("score: " + score);
+//
+//        Map<String, Object> response = new HashMap<>();
+//        response.put("date", request.getDate());
+//        response.put("score", score);
+//
+//        return response;
+//    }
 }
