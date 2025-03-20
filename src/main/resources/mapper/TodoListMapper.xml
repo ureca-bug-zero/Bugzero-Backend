@@ -5,11 +5,14 @@
 <mapper namespace="com.uplus.bugzerobackend.mapper.TodoListMapper">
 
     <!-- TodoList 삽입 -->
-
-
-	<insert id="insert" parameterType="com.uplus.bugzerobackend.dto.TodoListDto" useGeneratedKeys="true" keyProperty="id">
+	<insert id="insert" parameterType="com.uplus.bugzerobackend.dto.TodoListDto" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
 	    INSERT INTO todo_list (date, content, is_mission, is_checked, link, user_id)
 	    VALUES (#{date}, #{content}, #{mission}, #{checked}, #{link}, #{userId}) 
+	</insert>
+
+	<insert id="newTodoList" parameterType="map" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO todo_list(user_id, date, content, link, is_mission, is_checked)
+		VALUES (#{userId}, #{date}, #{content}, #{link}, 0, 0)
 	</insert>
 
 
