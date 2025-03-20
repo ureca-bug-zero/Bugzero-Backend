@@ -63,7 +63,7 @@ public class TodoListController {
 //    }
 
     // 모든 TodoList 조회
-    @GetMapping("/user/{userId}")
+    @GetMapping("/get")
     public ResponseEntity<ApiResponseDto<List<TodoListDto>>> getAllTodoLists(
             HttpServletRequest request,
             @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
