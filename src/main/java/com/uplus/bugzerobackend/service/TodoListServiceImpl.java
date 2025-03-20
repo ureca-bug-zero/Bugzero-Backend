@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service 
 public class TodoListServiceImpl implements TodoListService {
@@ -90,9 +91,16 @@ public class TodoListServiceImpl implements TodoListService {
     // 특정 유저의 todo 전체검색
     @Override
     public List<TodoListDto> searchAll(Integer userId, LocalDate date) {
+        // 1. userId가 존재하는지 확인
+        boolean userExists = todoListDao.existsByUserId(userId);
+        if (!userExists) {
+            throw new NoSuchElementException("해당 userId가 존재하지 않습니다: " + userId);
+        }
+
+        // 2. 존재하면 해당 유저의 투두 리스트 조회
         List<TodoListDto> todoList = todoListDao.searchAll(userId, date);
 
-        // 결과가 null이면 빈 리스트 반환 (예외 발생 X)
+        // 3. 투두 리스트가 없으면 빈 리스트 반환
         return todoList != null ? todoList : Collections.emptyList();
     }
 
