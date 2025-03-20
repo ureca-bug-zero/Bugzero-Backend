@@ -3,6 +3,7 @@ package com.uplus.bugzerobackend.service;
 import com.uplus.bugzerobackend.mapper.TodoListMapper;
 import com.uplus.bugzerobackend.mapper.UserMapper;
 import com.uplus.bugzerobackend.dto.TodoListDto;
+import com.uplus.bugzerobackend.dto.TodoListUpdateDto;
 import com.uplus.bugzerobackend.TodoListException;
 import com.uplus.bugzerobackend.domain.User;
 
@@ -45,20 +46,28 @@ public class TodoListServiceImpl implements TodoListService {
 
     // todo 수정
     @Override
-    public void update(TodoListDto todoList) {
+    public void update(Integer id, TodoListUpdateDto updateDto) {
         try {
-            if (todoList.getId() == null || todoList.getUserId() == null) {
-                throw new TodoListException("TodoList ID 또는 User ID가 필요합니다.");
-            }
-            TodoListDto existingTodoList = todoListDao.search(todoList.getId());
+            TodoListDto existingTodoList = todoListDao.search(id);
             if (existingTodoList == null) {
                 throw new TodoListException("수정할 TodoList를 찾을 수 없습니다.");
             }
-            todoListDao.update(todoList);	// Dto 객체 자체를 전달
+
+            // content와 link만 업데이트
+            if (updateDto.getContent() != null && !updateDto.getContent().trim().isEmpty()) {
+                existingTodoList.setContent(updateDto.getContent());
+            }
+            if (updateDto.getLink() != null && !updateDto.getLink().trim().isEmpty()) {
+                existingTodoList.setLink(updateDto.getLink());
+            }
+
+            todoListDao.update(existingTodoList);
         } catch (Exception e) {
             throw new TodoListException("TodoList 수정 중 오류 발생: " + e.getMessage());
         }
     }
+
+
 
 
     // todo 지정검색(todolist id로 검색)
