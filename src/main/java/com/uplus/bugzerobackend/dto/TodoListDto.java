@@ -3,21 +3,23 @@ package com.uplus.bugzerobackend.dto;
 import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.uplus.bugzerobackend.domain.User;
 
+import jakarta.persistence.Column;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 @Data
-@Getter
-@Setter
 public class TodoListDto {
     private Integer id;           // TodoList의 고유 ID
-    private LocalDate date;    // 날짜 추가
-    private String content;    // 할 일 내용
-    private boolean isMission; // 미션 여부 (필드명 수정)
-    private boolean isChecked; // 체크 여부
+    private LocalDate date;    	  // 날짜 추가
+    private String content;    	  // 할 일 내용
+    @Column(name = "is_checked")  // 컬럼명 매핑
+    private boolean checked;
+    @Column(name = "is_mission")
+    private boolean mission;
     private String link;       // 관련 링크
     private Integer userId;    // userId 필드 추가
     

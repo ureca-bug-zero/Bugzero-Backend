@@ -9,7 +9,7 @@
 
 	<insert id="insert" parameterType="com.uplus.bugzerobackend.dto.TodoListDto" useGeneratedKeys="true" keyProperty="id">
 	    INSERT INTO todo_list (date, content, is_mission, is_checked, link, user_id)
-	    VALUES (#{date}, #{content}, #{isMission}, #{isChecked}, #{link}, #{userId}) 
+	    VALUES (#{date}, #{content}, #{mission}, #{checked}, #{link}, #{userId}) 
 	</insert>
 
 
@@ -50,8 +50,8 @@
 	        id, 
 	        date, 
 	        content, 
-	        is_mission As isMission, 
-	        is_checked AS isChecked, 
+	        is_mission As mission, 
+	        is_checked AS checked, 
 	        link, 
 	        user_id AS userId 
 	    FROM todo_list
