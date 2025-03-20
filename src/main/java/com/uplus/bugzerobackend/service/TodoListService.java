@@ -14,6 +14,6 @@ public interface TodoListService {
     TodoListDto search(Integer id);     // TodoList 조회
     List<TodoListDto> searchAll(@Param("userId") Integer userId, @Param("date") LocalDate date);      // 모든 TodoList 조회
     void remove(Integer id);         // TodoList 삭제
-
+    List<TodoListDto> searchByUserIdAndYearMonth(@Param("userId") Integer userId, @Param("yearMonth") String yearMonth);
     void checkTodoList(Integer id);
 }

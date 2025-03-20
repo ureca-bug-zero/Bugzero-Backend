@@ -96,6 +96,15 @@ public class TodoListServiceImpl implements TodoListService {
         return todoList != null ? todoList : Collections.emptyList();
     }
 
+    //특정 유저의 특정 년-월 투두 검색
+    @Override
+    public List<TodoListDto> searchByUserIdAndYearMonth(Integer userId, String yearMonth) {
+        List<TodoListDto> todoList = todoListDao.findByUserIdAndYearMonth(userId, yearMonth);
+        
+        // 결과가 null이면 빈 리스트 반환 (예외 발생 X)
+        return todoList != null ? todoList : Collections.emptyList();
+    }
+    
     // todo 삭제
     @Override
     public void remove(Integer id) {
