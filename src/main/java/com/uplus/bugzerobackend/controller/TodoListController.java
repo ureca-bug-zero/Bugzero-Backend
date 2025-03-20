@@ -2,7 +2,6 @@ package com.uplus.bugzerobackend.controller;
 
 import com.uplus.bugzerobackend.dto.ApiResponseDto;
 import com.uplus.bugzerobackend.dto.TodoListDto;
-import com.uplus.bugzerobackend.dto.TodoListPostDto;
 import com.uplus.bugzerobackend.dto.TodoListUpdateDto;
 import com.uplus.bugzerobackend.service.JwtTokenService;
 import com.uplus.bugzerobackend.service.TodoListService;
