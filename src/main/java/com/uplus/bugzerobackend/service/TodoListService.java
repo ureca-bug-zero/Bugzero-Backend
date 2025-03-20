@@ -6,6 +6,7 @@ import com.uplus.bugzerobackend.dto.TodoListUpdateDto;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -17,5 +18,6 @@ public interface TodoListService {
     List<TodoListDto> searchAll(@Param("userId") Integer userId, @Param("date") LocalDate date);      // 모든 TodoList 조회
     void remove(Integer id);         // TodoList 삭제
     List<TodoListDto> searchByUserIdAndYearMonth(@Param("userId") Integer userId, @Param("yearMonth") String yearMonth);
-    void checkTodoList(Integer id);
+    Double checkTodoList(Integer id);
+    LocalDate getDate(Integer id);
 }
