@@ -2,9 +2,13 @@ package com.uplus.bugzerobackend.controller;
 
 import com.uplus.bugzerobackend.dto.ApiResponseDto;
 import com.uplus.bugzerobackend.dto.TodoListDto;
+import com.uplus.bugzerobackend.dto.TodoListPostDto;
 import com.uplus.bugzerobackend.dto.TodoListUpdateDto;
+import com.uplus.bugzerobackend.service.JwtTokenService;
 import com.uplus.bugzerobackend.service.TodoListService;
 
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,22 +22,24 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/todolist")
+@RequiredArgsConstructor
 //@Slf4j
 public class TodoListController {
 
     private final TodoListService todoListService;
+    private final JwtTokenService jwtTokenService;
 
-    public TodoListController(TodoListService todoListService) {
-//    	log.debug("TodoListController....." );
-    	System.out.println("................................");
-        this.todoListService = todoListService;
-    }
+//    public TodoListController(TodoListService todoListService) {
+////    	log.debug("TodoListController....." );
+//    	System.out.println("................................");
+//        this.todoListService = todoListService;
+//    }
 
     // TodoList 추가
     @PostMapping
     public ResponseEntity<ApiResponseDto<Map<String, Integer>>> createTodoList(@RequestBody TodoListDto todoList) {
 //    	log.debug("createTodoList todoList:{}", todoList);
-    	System.out.println("todoList:"+todoList);
+        System.out.println("todoList:" + todoList);
         todoListService.insert(todoList);
 
         return ResponseEntity.ok(ApiResponseDto.success("TodoList가 성공적으로 생성되었습니다.", Map.of("id", todoList.getId())));
@@ -49,9 +55,9 @@ public class TodoListController {
     // 모든 TodoList 조회
     @GetMapping("/user/{userId}")
     public ResponseEntity<ApiResponseDto<List<TodoListDto>>> getAllTodoLists(
-        @PathVariable("userId") Integer userId,
-        @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
-
+            HttpServletRequest request,
+            @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+        Integer userId = jwtTokenService.getUserId(request);
         List<TodoListDto> todoList = todoListService.searchAll(userId, date);
         return ResponseEntity.ok(ApiResponseDto.success("Todo List 조회를 성공하였습니다.",todoList));
     }
