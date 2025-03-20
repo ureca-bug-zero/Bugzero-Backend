@@ -25,6 +25,6 @@
 
 	<!-- 새로 가입한 유저의 친구 리스트 생성 -->
 	<insert id="insertFriendList" parameterType="int">
-        INSERT INTO friend (user_id, friend_list) VALUES (#{userId}, '[]')
+        INSERT INTO friend (user_id, friendList) VALUES (#{userId}, '[]')
     </insert>
 </mapper>

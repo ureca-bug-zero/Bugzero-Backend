@@ -1,6 +1,7 @@
 package com.uplus.bugzerobackend.controller;
 
 import com.uplus.bugzerobackend.dto.TodoListDto;
+import com.uplus.bugzerobackend.dto.TodoListUpdateDto;
 import com.uplus.bugzerobackend.service.TodoListService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -53,11 +54,9 @@ public class TodoListController {
     }
 
     // TodoList 수정
-    @PutMapping("/{id}")
-    public ResponseEntity<String> updateTodoList(@PathVariable("id") Integer id, @RequestBody TodoListDto todoList) {
-
-        todoList.setId(id);
-        todoListService.update(todoList);
+    @PatchMapping("/{id}")
+    public ResponseEntity<String> updateTodoList(@PathVariable("id") Integer id, @RequestBody TodoListUpdateDto updateDto) {
+    	todoListService.update(id, updateDto);
         return ResponseEntity.ok("TodoList가 성공적으로 수정되었습니다.");
     }
 
