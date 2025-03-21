@@ -24,4 +24,12 @@
         DELETE FROM friend_request
         WHERE sender_id = #{senderId} AND receiver_id = #{receiverId}
     </delete>
+    
+    <select id="findFriendRequestsByReceiverId" resultType="com.uplus.bugzerobackend.dto.FriendListDto">
+	    SELECT fr.sender_id AS senderId, u.name AS name
+	    FROM friend_request fr
+	    JOIN `user` u ON fr.sender_id = u.id
+	    WHERE fr.receiver_id = #{receiverId}
+	</select>
+
 </mapper>

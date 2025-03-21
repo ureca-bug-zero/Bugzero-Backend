@@ -1,11 +1,15 @@
 package com.uplus.bugzerobackend.service;
 
 
+import com.uplus.bugzerobackend.dto.FriendListDto;
 import com.uplus.bugzerobackend.dto.FriendRequestDto;
 import com.uplus.bugzerobackend.dto.FriendResponseDto;
 import com.uplus.bugzerobackend.mapper.FriendRequestMapper;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.List;
+
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
@@ -75,6 +79,15 @@ public class FriendRequestService {
         friendRequestMapper.updateFriendList(friendResponseDto);
         friendRequestMapper.updateFriendList(reverseDto);
     }
+    
+    public List<FriendListDto> getFriendRequests(Integer userId) throws Exception {
+        try {
+            return friendRequestMapper.findFriendRequestsByReceiverId(userId);
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+    }
+
 
 
 }
