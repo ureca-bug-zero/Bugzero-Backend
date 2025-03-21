@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.uplus.bugzerobackend.mapper.UserMapper">
+	<!-- Id 로 사용자 조회-->
+    <select id="getUserById" parameterType="int" resultType="com.uplus.bugzerobackend.domain.User">
+        SELECT id, name, email, week_score, `rank`
+        FROM `user`
+        WHERE id = #{userId}
+    </select>
+	
+	<!-- email로 사용자 조회 (이미 존재하는 회원인지 확인)-->
+    <select id="getUserByEmail" parameterType="string" resultType="com.uplus.bugzerobackend.dto.KakaoUserDto">
+        SELECT id, name, email, week_score, `rank`
+        FROM `user`
+        WHERE email = #{email}
+    </select>
+    
+    <!-- 새로운 user 추가 (카카오 회원가입) -->
+    <insert id="insertUser" parameterType="com.uplus.bugzerobackend.dto.KakaoUserDto">
+        INSERT INTO `user` (name, email, week_score, `rank`)
+        VALUES (#{name}, #{email}, #{weekScore}, #{rank})
+    </insert>
+    
+    
+    <select id="findAll" resultType="com.uplus.bugzerobackend.dto.UserDto">
+		SELECT id, week_score AS weekScore
+		FROM user
+	</select>
+	
+	<update id="update" parameterType="com.uplus.bugzerobackend.dto.UserDto">
+        UPDATE user
+        SET id = #{id}, week_score = #{weekScore}, `rank` = #{rank}
+        WHERE id = #{id}
+    </update>
+
+</mapper>
