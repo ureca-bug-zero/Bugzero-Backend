@@ -6,6 +6,9 @@ import com.uplus.bugzerobackend.dto.FriendResponseDto;
 import com.uplus.bugzerobackend.mapper.FriendRequestMapper;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.List;
+
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
@@ -75,6 +78,15 @@ public class FriendRequestService {
         friendRequestMapper.updateFriendList(friendResponseDto);
         friendRequestMapper.updateFriendList(reverseDto);
     }
+    
+    public List<FriendResponseDto> getFriendRequests(Integer userId) {
+        try {
+            return friendRequestMapper.findFriendRequestsByReceiverId(userId);
+        } catch (DataAccessException e) {
+            throw new IllegalStateException("친구 요청 목록을 불러오는 중 오류가 발생하였습니다.");
+        }
+    }
+
 
 
 }

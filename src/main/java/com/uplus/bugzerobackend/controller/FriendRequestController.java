@@ -2,10 +2,14 @@ package com.uplus.bugzerobackend.controller;
 
 import com.uplus.bugzerobackend.dto.ApiResponseDto;
 import com.uplus.bugzerobackend.dto.FriendRequestDto;
+import com.uplus.bugzerobackend.dto.FriendResponseDto;
 import com.uplus.bugzerobackend.service.FriendRequestService;
 import com.uplus.bugzerobackend.service.JwtTokenService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +31,13 @@ public class FriendRequestController {
         friendRequestService.insertFriendRequest(email, senderId);
 
         return ResponseEntity.ok(ApiResponseDto.success("친구 요청을 성공하였습니다.", null));
+    }
+    
+    @GetMapping("/requests")
+    public ResponseEntity<ApiResponseDto<List<FriendResponseDto>>> getFriendRequests(HttpServletRequest request) {
+        Integer userId = jwtTokenService.getUserId(request);
+        List<FriendResponseDto> friendRequests = friendRequestService.getFriendRequests(userId);
+        return ResponseEntity.ok(ApiResponseDto.success("친구 요청 목록 조회를 성공하였습니다.", friendRequests));
     }
 
     @PostMapping("/response/refuse")
