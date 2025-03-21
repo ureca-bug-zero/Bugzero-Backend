@@ -42,7 +42,7 @@ public class FriendTodoListController {
         Friend friend = friendMapper.getFriendById(userId);
         boolean isContain = friend.getFriendList().contains(friendId);
         
-        if(isContain) {
+        if(!isContain) {
             throw new EntityNotFoundException("친구가 아닙니다.");
         }
         
