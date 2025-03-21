@@ -1,6 +1,7 @@
 package com.uplus.bugzerobackend.service;
 
 
+import com.uplus.bugzerobackend.dto.FriendListDto;
 import com.uplus.bugzerobackend.dto.FriendRequestDto;
 import com.uplus.bugzerobackend.dto.FriendResponseDto;
 import com.uplus.bugzerobackend.mapper.FriendRequestMapper;
@@ -79,11 +80,11 @@ public class FriendRequestService {
         friendRequestMapper.updateFriendList(reverseDto);
     }
     
-    public List<FriendResponseDto> getFriendRequests(Integer userId) {
+    public List<FriendListDto> getFriendRequests(Integer userId) throws Exception {
         try {
             return friendRequestMapper.findFriendRequestsByReceiverId(userId);
-        } catch (DataAccessException e) {
-            throw new IllegalStateException("친구 요청 목록을 불러오는 중 오류가 발생하였습니다.");
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
         }
     }
 

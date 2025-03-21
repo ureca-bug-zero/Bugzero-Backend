@@ -1,6 +1,7 @@
 package com.uplus.bugzerobackend.controller;
 
 import com.uplus.bugzerobackend.dto.ApiResponseDto;
+import com.uplus.bugzerobackend.dto.FriendListDto;
 import com.uplus.bugzerobackend.dto.FriendRequestDto;
 import com.uplus.bugzerobackend.dto.FriendResponseDto;
 import com.uplus.bugzerobackend.service.FriendRequestService;
@@ -34,9 +35,9 @@ public class FriendRequestController {
     }
     
     @GetMapping("/requests")
-    public ResponseEntity<ApiResponseDto<List<FriendResponseDto>>> getFriendRequests(HttpServletRequest request) {
+    public ResponseEntity<ApiResponseDto<List<FriendListDto>>> getFriendRequests(HttpServletRequest request) throws Exception {
         Integer userId = jwtTokenService.getUserId(request);
-        List<FriendResponseDto> friendRequests = friendRequestService.getFriendRequests(userId);
+        List<FriendListDto> friendRequests = friendRequestService.getFriendRequests(userId);
         return ResponseEntity.ok(ApiResponseDto.success("친구 요청 목록 조회를 성공하였습니다.", friendRequests));
     }
 
