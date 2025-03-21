@@ -3,7 +3,7 @@
 ---
 
 ## 📌 프로젝트 소개
-Bug Zero!는 IT 개발자에게 최적화된 Todo List를 제공하는 서비스입니다.
+**Bug Zero!** 는 IT 개발자에게 최적화된 Todo List를 제공하는 서비스입니다.
 <br/> 이 프로젝트는 백엔드 애플리케이션으로, 투두리스트 데이터 및 미션을 관리하고 사용자 인터렉션(투두리스트, 캘린더, 친구, 랭킹 등)을 처리합니다.
 
 ---
@@ -44,10 +44,26 @@ src
 - **언어**: Java 17
 - **프레임워크**: Spring Boot 3.4.3
 - **데이터베이스**: MySQL
-- **보안**: Spring Security, JWT
+- **보안**: JWT
 - **API 통신**: RESTful API, Kakao OAuth 2.0
 - **기타**: Hibernate, Gradle, Log4j2
 
 ---
 
-## 🔮 향후 계획
+## 👩‍💻 팀원 소개
+<table >
+    <tr>
+      <td align="center"><img src="https://avatars.githubusercontent.com/u/88073842?s=400&u=bc39f4c6820808f5c034dc5e210f7ea279bff43c&v=4" width="130"></td>
+      <td align="center"><img src="https://avatars.githubusercontent.com/u/164132741?v=4" width="130"></td>
+      <td align="center" ><img src="https://avatars.githubusercontent.com/u/195983909?v=4" width="130" borderRadius="100%"></td>
+      <td align="center"><img src="https://avatars.githubusercontent.com/u/125029488?v=4" width="130"></td>
+      <td align="center" ><img src="https://avatars.githubusercontent.com/u/171488704?v=4" width="130" borderRadius="100%"></td>
+    </tr>
+    <tr>
+      <td align="center"><a href="https://github.com/sujinRo" target="_blank" width="160">sujinRo</a></td>
+      <td align="center"><a href="https://github.com/seohyunn2" target="_blank">seohyunn2</a></td>
+      <td align="center"><a href="https://github.com/minji-38" target="_blank">minji-38</a></td>
+      <td align="center"><a href="https://github.com/Jetty-Lee" target="_blank">Jetty-Lee</a></td>
+      <td align="center"><a href="https://github.com/eunchrri" target="_blank">eunchrri</a></td>
+    </tr>
+  </table>
