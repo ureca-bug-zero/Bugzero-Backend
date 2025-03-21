@@ -23,8 +23,8 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/friend/calendar")
 @RequiredArgsConstructor
 public class FriendCalendarController {
-	
-	private final FriendMapper friendMapper;
+    
+    private final FriendMapper friendMapper;
     private final TodoListService todoListService;
     private final CalendarService calendarService;
     private final JwtTokenService jwtTokenService;
@@ -32,7 +32,7 @@ public class FriendCalendarController {
     // 월별 투두 개수 조회
     @GetMapping("/{friendId}")
     public ResponseEntity<ApiResponseDto<Map<String, Object>>> getMonthlyProgress(
-            HttpServletRequest request,  @PathVariable("friendId") Integer friendId, @RequestParam String yearMonth) {
+            HttpServletRequest request,  @PathVariable("friendId") Integer friendId, @RequestParam(name="yearMonth") String yearMonth) {
         Integer userId = jwtTokenService.getUserId(request);
         Friend friend = friendMapper.getFriendById(userId);
         
