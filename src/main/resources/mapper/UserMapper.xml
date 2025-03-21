@@ -25,7 +25,7 @@
     
     
     <select id="findAll" resultType="com.uplus.bugzerobackend.dto.UserDto">
-		SELECT id, week_score
+		SELECT id, week_score AS weekScore
 		FROM user
 	</select>
 	
