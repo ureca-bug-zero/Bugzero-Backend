@@ -10,8 +10,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor  // 기본 생성자 추가
 public class CalendarRequestDto {
-    private Integer userId;
     private String yearMonth;    // "2025-01" 형식
+
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate date;      // "2025-01-01" 형식

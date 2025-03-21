@@ -1,5 +1,6 @@
 package com.uplus.bugzerobackend.service;
 
+import com.uplus.bugzerobackend.dto.TodoListPostDto;
 import com.uplus.bugzerobackend.mapper.TodoListMapper;
 import com.uplus.bugzerobackend.mapper.UserMapper;
 import com.uplus.bugzerobackend.dto.TodoListDto;
@@ -11,10 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
 import java.time.LocalDate;
-import java.util.Collections;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 @Service 
 public class TodoListServiceImpl implements TodoListService {
@@ -24,11 +24,14 @@ public class TodoListServiceImpl implements TodoListService {
     private TodoListMapper todoListMapper;
 
     @Autowired
-    public TodoListServiceImpl(TodoListMapper todoListDao) {
+    public TodoListServiceImpl(TodoListMapper todoListDao, CalendarService calendarService) {
         this.todoListDao = todoListDao;
+        this.calendarService = calendarService;
     }
     @Autowired
     private UserMapper userMapper;
+
+    private final CalendarService calendarService;
     
     //todo등록
     @Override
@@ -46,6 +49,28 @@ public class TodoListServiceImpl implements TodoListService {
         // User 정보 설정
         todoListDto.setUser(user);
         todoListDao.insert(todoListDto);
+    }
+
+    @Override
+    public Integer newTodoList(Integer userId, TodoListPostDto todoListPostDto) {
+        try {
+            if(userId == null) {
+                throw new EntityNotFoundException("userId가 없습니다.");
+            }
+            Map<String, Object> todoMap = new HashMap<>();
+            todoMap.put("userId", userId);
+            todoMap.put("date", todoListPostDto.getDate());
+            todoMap.put("content", todoListPostDto.getContent());
+            todoMap.put("link", todoListPostDto.getLink());
+            todoListMapper.newTodoList(todoMap);
+
+            Object getId = todoMap.get("id");
+            BigInteger big = new BigInteger(String.valueOf(getId));
+            Integer todoId = big.intValue();
+            return todoId;
+        } catch(Exception e) {
+            throw new IllegalStateException("TodoList 추가 중 오류 발생: " + e.getMessage());
+        }
     }
 
     // todo 수정
@@ -128,12 +153,32 @@ public class TodoListServiceImpl implements TodoListService {
     }
 
     @Override
-    public void checkTodoList(Integer id) {
+    public Double checkTodoList(Integer id) {
         try {
+            TodoListDto todo = todoListMapper.search(id);
+            if (todo == null) {
+                throw new EntityNotFoundException("해당 ID의 TodoList가 없습니다.");
+            }
+
             todoListMapper.checkTodoList(id);
-        } catch(DataAccessException e){
+
+            List<TodoListDto> todoLists = todoListMapper.searchAll(todo.getUserId(), todo.getDate());
+
+            // 달성률 계산
+            Map<Integer, Double> progressMap = calendarService.processProgress(todoLists);
+            double progress = progressMap.getOrDefault(todo.getDate().getDayOfMonth(), 0.0);
+
+            return Math.round(progress * 100.0) / 100.0;
+        } catch (DataAccessException e) {
             throw new IllegalStateException("체크리스트 처리 중 오류가 발생하였습니다.");
         }
+    }
+
+    @Override
+    public LocalDate getDate(Integer id) {
+        LocalDate date = todoListMapper.getDateById(id);
+
+        return date;
     }
     
 }
