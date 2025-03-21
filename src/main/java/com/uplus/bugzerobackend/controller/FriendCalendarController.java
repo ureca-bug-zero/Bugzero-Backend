@@ -4,11 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.uplus.bugzerobackend.domain.Friend;
 import com.uplus.bugzerobackend.dto.ApiResponseDto;
@@ -34,20 +30,20 @@ public class FriendCalendarController {
     private final JwtTokenService jwtTokenService;
 
     // 월별 투두 개수 조회
-    @PostMapping("/{friendId}")
+    @GetMapping("/{friendId}")
     public ResponseEntity<ApiResponseDto<Map<String, Object>>> getMonthlyProgress(
-            HttpServletRequest request,  @PathVariable("friendId") Integer friendId, @RequestBody CalendarRequestDto calendarRequestDto) {
+            HttpServletRequest request,  @PathVariable("friendId") Integer friendId, @RequestParam String yearMonth) {
         Integer userId = jwtTokenService.getUserId(request);
         Friend friend = friendMapper.getFriendById(userId);
         
         boolean isContain = friend.getFriendList().contains(friendId);
-        if(isContain) {
+        if(!isContain) {
             throw new EntityNotFoundException("친구가 아닙니다.");
         }
         
-        List<TodoListDto> todoLists = todoListService.searchByUserIdAndYearMonth(friendId, calendarRequestDto.getYearMonth());
+        List<TodoListDto> todoLists = todoListService.searchByUserIdAndYearMonth(friendId, yearMonth);
 
-        Map<String, Object> response = calendarService.processMonthly(todoLists, calendarRequestDto);
+        Map<String, Object> response = calendarService.processMonthly(todoLists, yearMonth);
         return ResponseEntity.ok(ApiResponseDto.success("캘린더 조회를 성공하였습니다.", response));
     }
 }
