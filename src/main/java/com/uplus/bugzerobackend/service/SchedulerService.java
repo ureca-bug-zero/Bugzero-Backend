@@ -77,11 +77,11 @@ public class SchedulerService implements SchedulingConfigurer{
 			int originWeekScore = user.getWeekScore();
 			List<TodoListDto> searchedTodoList = todoListMapper.searchAll(user.getId(), LocalDate.now().minusDays(1));
 			// 체크한 내용 크기 
-			long checkedCount = searchedTodoList.stream().filter(todo -> todo.isChecked() == true).count();
+			long checkedCount = searchedTodoList.stream().filter(todo -> todo.isChecked()).count();
 			// 전체 크기
 			int totalCount = searchedTodoList.size();
 			// 미션인 값 가져와서 isChecked인지 확인
-			Optional<TodoListDto> missionTodo = searchedTodoList.stream().filter(todo -> todo.isMission() == true).findFirst();
+			Optional<TodoListDto> missionTodo = searchedTodoList.stream().filter(todo -> todo.isMission()).findFirst();
 			boolean isMissionChecked = missionTodo.map(TodoListDto::isChecked).orElse(false);
 			
 			if(isMissionChecked) {
@@ -117,17 +117,37 @@ public class SchedulerService implements SchedulingConfigurer{
 	// 랭킹 초기화
 	private void runRankingScheduledTask() {
 		List<UserDto> userList = userMapper.findAll();
+
 		userList.sort((u1, u2) -> u2.getWeekScore().compareTo(u1.getWeekScore()));// weekScore 기준 내림차순
-		
-		for (UserDto user : userList) {
-			user.setRank(user.getId());
-			user.setWeekScore(0);
-			userMapper.update(user);
-		}
+	    
+	    int rank = 1; // 현재 랭킹
+	    int sameRankCount = 1; // 같은 점수인 사용자 수
+
+	    for (int i = 0; i < userList.size(); i++) {
+	        UserDto user = userList.get(i);
+
+	        // 이전 사용자와 점수가 다르면 랭킹 증가
+	        if (i > 0 && !user.getWeekScore().equals(userList.get(i - 1).getWeekScore())) {
+	            rank += sameRankCount;
+	            sameRankCount = 1; // 동일 점수 개수 초기화
+	        } else if (i > 0) {
+	            sameRankCount++;
+	        }
+
+	        user.setRank(rank);
+	        userMapper.update(user);
+	    }
+	    
+	    for (int i = 0; i < userList.size(); i++) {
+	    	UserDto user = userList.get(i);
+	    	user.setWeekScore(0);
+	    	userMapper.update(user);
+	    }
+
 		log.info("현재 시간: {}", System.currentTimeMillis());
 	}
 	private Trigger getRankingTrigger() {
 		return new org.springframework.scheduling.support.CronTrigger(rankingCronExpression);
-		
+
 	}
 }

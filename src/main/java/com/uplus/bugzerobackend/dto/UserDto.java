@@ -7,6 +7,6 @@ import lombok.Setter;
 @Getter
 public class UserDto {
 	private Integer id; //user 
-	private Integer weekScore = 0;
-	private Integer rank = 0;
+	private Integer weekScore;
+	private Integer rank;
 }
