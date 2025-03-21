@@ -8,16 +8,12 @@ import com.uplus.bugzerobackend.service.JwtTokenService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.uplus.bugzerobackend.dto.CalendarRequestDto;
 import com.uplus.bugzerobackend.dto.TodoListDto;
 import com.uplus.bugzerobackend.service.CalendarService;
 import com.uplus.bugzerobackend.service.TodoListService;
-
-import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/calendar")
@@ -30,9 +26,9 @@ public class   CalendarController {
 
 
     // 월별 투두 개수 조회
-    @PostMapping("/monthly")
+    @GetMapping
     public ResponseEntity<ApiResponseDto<Map<String, Object>>> getMonthlyProgress(
-            HttpServletRequest request,  @RequestBody String yearMonth) {
+            HttpServletRequest request,  @RequestParam(name="yearMonth") String yearMonth) {
         Integer userId = jwtTokenService.getUserId(request);
         List<TodoListDto> todoLists = todoListService.searchByUserIdAndYearMonth(userId, yearMonth);
 

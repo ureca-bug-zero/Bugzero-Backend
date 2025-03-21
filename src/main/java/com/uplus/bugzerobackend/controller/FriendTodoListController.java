@@ -27,10 +27,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 
 public class FriendTodoListController {
-	private final FriendMapper friendMapper;
-	private final TodoListService todoListService;
-	private final JwtTokenService jwtTokenService;
-	
+    private final FriendMapper friendMapper;
+    private final TodoListService todoListService;
+    private final JwtTokenService jwtTokenService;
+    
     // 모든 TodoList 조회
     @GetMapping("/{friendId}")
     public ResponseEntity<ApiResponseDto<List<TodoListDto>>> getAllTodoLists(
@@ -38,7 +38,7 @@ public class FriendTodoListController {
             @PathVariable("friendId") Integer friendId,
             @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         
-    	Integer userId = jwtTokenService.getUserId(request);
+        Integer userId = jwtTokenService.getUserId(request);
         Friend friend = friendMapper.getFriendById(userId);
         boolean isContain = friend.getFriendList().contains(friendId);
         
