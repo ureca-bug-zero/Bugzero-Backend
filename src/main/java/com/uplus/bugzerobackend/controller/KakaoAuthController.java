@@ -38,4 +38,16 @@ public class KakaoAuthController {
         String jwtToken = jwtTokenService.generateToken(user);
         return ResponseEntity.ok(ApiResponseDto.success("로그인 성공", jwtToken));
     }
+    
+    // 카카오 로그아웃 처리 -> kakao-redirect-url로 redirect
+    @GetMapping("/kakao/logout")
+    public void kakaoLogout(HttpServletResponse response) throws Exception {
+        String logoutUrl = "https://kauth.kakao.com/oauth/logout" +
+            "?client_id=" + kakaoAuthService.getClientId() +
+            "&logout_redirect_uri=" + kakaoAuthService.getLogoutRedirectUri();
+
+        response.sendRedirect(logoutUrl);
+    }
+
+    
 }
