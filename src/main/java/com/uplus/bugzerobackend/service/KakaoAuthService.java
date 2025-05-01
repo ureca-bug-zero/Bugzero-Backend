@@ -30,6 +30,9 @@ public class KakaoAuthService {
 
     @Value("${kakao.redirect-uri}")
     private String redirectUri;
+    
+    @Value("${kakao.logout-redirect-uri}")
+    private String logoutRedirectUri;
 
     private final UserMapper userMapper;
     private final FriendMapper friendMapper;
@@ -129,4 +132,14 @@ public class KakaoAuthService {
 
         return newUser; // 새로 가입한 회원 정보 반환
     }
+    
+    public String getClientId() {
+        return clientId;
+    }
+
+    public String getLogoutRedirectUri() {
+        return logoutRedirectUri;
+    }
+
+
 }
