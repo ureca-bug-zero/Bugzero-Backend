@@ -26,9 +26,9 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
-    - run: docker build -t ghcr.io/${{ github.repository }}:latest .
+    - run: docker build -t ghcr.io/ureca-bug-zero/bugzero-backend:latest .
 
-    - run: docker push ghcr.io/${{ github.repository }}:latest
+    - run: docker push ghcr.io/ureca-bug-zero/bugzero-backend:latest
 
     - uses: appleboy/ssh-action@v0.1.6
       with:
@@ -37,7 +37,7 @@ jobs:
         key: ${{ secrets.EC2_KEY }}
         script: |
           docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
-          docker pull ghcr.io/${{ github.repository }}:latest
+          docker pull ghcr.io/ureca-bug-zero/bugzero-backend:latest
           docker stop cointalk || true
           docker rm cointalk || true
-          docker run -d --name cointalk -p 80:8080 ghcr.io/${{ github.repository }}:latest
+          docker run -d --name cointalk -p 80:8080 ghcr.io/ureca-bug-zero/bugzero-backend:latest
