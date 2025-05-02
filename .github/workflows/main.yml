@@ -34,4 +34,4 @@ jobs:
           docker stop cointalk || true
           docker rm cointalk || true
           docker build -t cointalk .
-          docker run -d --name cointalk -p 80:8080 cointalk
+          docker run -d --network host --name cointalk cointalk
