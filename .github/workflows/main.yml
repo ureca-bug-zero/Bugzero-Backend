@@ -1,4 +1,4 @@
-name: Deploy to EC2 via Docker
+name: Deploy to EC2 via internal Docker build
 
 on:
   push:
@@ -9,35 +9,29 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-    - uses: actions/setup-java@v2
-      with:
-        java-version: '17'
-        distribution: 'temurin'
-
-    - run: chmod +x gradlew
-
-    - run: ./gradlew clean build
-
-    - uses: docker/login-action@v2
-      with:
-        registry: ghcr.io
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
-
-    - run: docker build -t ghcr.io/ureca-bug-zero/bugzero-backend:latest .
-
-    - run: docker push ghcr.io/ureca-bug-zero/bugzero-backend:latest
-
-    - uses: appleboy/ssh-action@v0.1.6
+    - name: Upload source code to EC2
+      uses: appleboy/scp-action@v0.1.7
       with:
         host: ${{ secrets.EC2_HOST }}
-        username: ${{ secrets.EC2_USER }} 
+        username: ${{ secrets.EC2_USER }}
+        key: ${{ secrets.EC2_KEY }}
+        source: "."
+        target: "~/bugzero-deploy"
+
+    - name: SSH into EC2 and build & run Docker
+      uses: appleboy/ssh-action@v0.1.6
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USER }}
         key: ${{ secrets.EC2_KEY }}
         script: |
-          docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
-          docker pull ghcr.io/ureca-bug-zero/bugzero-backend:latest
+          cd ~/bugzero-deploy
+          chmod +x gradlew
+          ./gradlew clean build
           docker stop cointalk || true
           docker rm cointalk || true
-          docker run -d --name cointalk -p 80:8080 ghcr.io/ureca-bug-zero/bugzero-backend:latest
+          docker build -t cointalk .
+          docker run -d --name cointalk -p 80:8080 cointalk
