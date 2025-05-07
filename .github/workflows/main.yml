@@ -9,46 +9,43 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Create .env file from GitHub secrets
-      run: |
-        echo "DATASOURCE_URL=${{ secrets.DATASOURCE_URL }}" > .env
-        echo "DATASOURCE_USERNAME=${{ secrets.DATASOURCE_USERNAME }}" >> .env
-        echo "DATASOURCE_PASSWORD=${{ secrets.DATASOURCE_PASSWORD }}" >> .env
-        echo "KAKAO_ID=${{ secrets.KAKAO_ID }}" >> .env
-        echo "KAKAO_SECRET=${{ secrets.KAKAO_SECRET }}" >> .env
-        echo "KAKAO_URI=${{ secrets.KAKAO_URI }}" >> .env
-        echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
+      - name: Create .env file from GitHub secrets
+        run: |
+          echo "DATASOURCE_URL=${{ secrets.DATASOURCE_URL }}" > .env
+          echo "DATASOURCE_USERNAME=${{ secrets.DATASOURCE_USERNAME }}" >> .env
+          echo "DATASOURCE_PASSWORD=${{ secrets.DATASOURCE_PASSWORD }}" >> .env
+          echo "KAKAO_ID=${{ secrets.KAKAO_ID }}" >> .env
+          echo "KAKAO_SECRET=${{ secrets.KAKAO_SECRET }}" >> .env
+          echo "KAKAO_URI=${{ secrets.KAKAO_URI }}" >> .env
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
 
-    - name: ✅ 확인 - .env 생성됐는지 체크
-      run: ls -l .env
+      - name: Build Spring Boot App
+        run: ./gradlew clean build -x test
 
-    - name: Build Spring Boot App
-      run: ./gradlew clean build -x test
+      - name: Upload build, Dockerfile, and .env to EC2
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_KEY }}
+          source: |
+            build/libs
+            Dockerfile
+            .env
+          target: "~/bugzero-deploy"
 
-    - name: Upload build, Dockerfile, and .env to EC2
-      uses: appleboy/scp-action@v0.1.7
-      with:
-        host: ${{ secrets.EC2_HOST }}
-        username: ${{ secrets.EC2_USER }}
-        key: ${{ secrets.EC2_KEY }}
-        source: |
-          build/libs
-          Dockerfile
-          .env
-        target: "~/bugzero-deploy"
-
-    - name: SSH into EC2 and build & run Docker
-      uses: appleboy/ssh-action@v0.1.6
-      with:
-        host: ${{ secrets.EC2_HOST }}
-        username: ${{ secrets.EC2_USER }}
-        key: ${{ secrets.EC2_KEY }}
-        script: |
-          cd ~/bugzero-deploy
-          docker stop cointalk || true
-          docker rm cointalk || true
-          docker build -t cointalk .
-          docker run -d --network host --env-file .env --name cointalk cointalk
+      - name: SSH into EC2 and build & run Docker
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_KEY }}
+          script: |
+            cd ~/bugzero-deploy
+            docker stop cointalk || true
+            docker rm cointalk || true
+            docker build -t cointalk .
+            docker run -d --network host --env-file .env --name cointalk cointalk
