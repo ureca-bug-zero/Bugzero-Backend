@@ -1,17 +1,14 @@
 name: Deploy to EC2 via internal Docker build
-
 on:
   push:
     branches: [ main ]
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
+      
       - name: Create .env file from GitHub secrets
         run: |
           echo "DATASOURCE_URL=${{ secrets.DATASOURCE_URL }}" > .env
@@ -21,31 +18,29 @@ jobs:
           echo "KAKAO_SECRET=${{ secrets.KAKAO_SECRET }}" >> .env
           echo "KAKAO_URI=${{ secrets.KAKAO_URI }}" >> .env
           echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
-
+      
       - name: Build Spring Boot App
         run: ./gradlew clean build -x test
-
-      - name: Check .env exists
-        run: ls -l .env
-
-      - name: Check JAR exists
-        run: ls -l build/libs
-
-      - name: Check Dockerfile exists
-        run: ls -l Dockerfile
-
+      
+      - name: Check directory structure before upload
+        run: |
+          echo "Current directory contents:"
+          ls -la
+          echo "Build directory contents:"
+          ls -la build/ || echo "build directory not found"
+          echo "Build/libs directory contents:"
+          ls -la build/libs/ || echo "build/libs directory not found"
+      
       - name: Upload build, Dockerfile, and .env to EC2
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_KEY }}
-          source: |
-            build/libs
-            Dockerfile
-            .env
+          source: "build/libs/*.jar,Dockerfile,.env"
           target: "~/bugzero-deploy"
-
+          debug: true
+      
       - name: SSH into EC2 and build & run Docker
         uses: appleboy/ssh-action@v0.1.6
         with:
