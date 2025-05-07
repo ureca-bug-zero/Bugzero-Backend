@@ -12,7 +12,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Create .env file from GitHub secrets
+      - name: 🔐 Create .env file from GitHub secrets
         run: |
           echo "DATASOURCE_URL=${{ secrets.DATASOURCE_URL }}" > .env
           echo "DATASOURCE_USERNAME=${{ secrets.DATASOURCE_USERNAME }}" >> .env
@@ -22,10 +22,19 @@ jobs:
           echo "KAKAO_URI=${{ secrets.KAKAO_URI }}" >> .env
           echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
 
-      - name: Build Spring Boot App
+      - name: ⚙️ Build Spring Boot App
         run: ./gradlew clean build -x test
 
-      - name: Upload build, Dockerfile, and .env to EC2
+      - name: 📦 Check .env exists
+        run: ls -l .env
+
+      - name: 📦 Check JAR exists
+        run: ls -l build/libs
+
+      - name: 📦 Check Dockerfile exists
+        run: ls -l Dockerfile
+
+      - name: 📤 Upload build, Dockerfile, and .env to EC2
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.EC2_HOST }}
@@ -37,7 +46,7 @@ jobs:
             .env
           target: "~/bugzero-deploy"
 
-      - name: SSH into EC2 and build & run Docker
+      - name: 🚀 SSH into EC2 and build & run Docker
         uses: appleboy/ssh-action@v0.1.6
         with:
           host: ${{ secrets.EC2_HOST }}
