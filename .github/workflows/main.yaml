@@ -40,10 +40,7 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_KEY }}
-          source: |
-            build/libs
-            Dockerfile
-            .env
+          source: "build/libs Dockerfile .env"
           target: "~/bugzero-deploy"
 
       - name: 🚀 SSH into EC2 and build & run Docker
