@@ -51,6 +51,10 @@ dependencies {
     implementation 'me.paulschwarz:spring-dotenv:2.3.0'
 
 }
+
+bootJar {
+    archiveFileName = 'bugzero-backend-0.0.1-SNAPSHOT.jar'
+}
 //tasks.named('test') {
 //  useJUnitPlatform()
 //}
