@@ -12,13 +12,23 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Upload source code to EC2
+    - name: Create .env file from GitHub secrets
+      run: |
+        echo "DATASOURCE_URL=${{ secrets.DATASOURCE_URL }}" > .env
+        echo "DATASOURCE_USERNAME=${{ secrets.DATASOURCE_USERNAME }}" >> .env
+        echo "DATASOURCE_PASSWORD=${{ secrets.DATASOURCE_PASSWORD }}" >> .env
+        echo "KAKAO_ID=${{ secrets.KAKAO_ID }}" >> .env
+        echo "KAKAO_SECRET=${{ secrets.KAKAO_SECRET }}" >> .env
+        echo "KAKAO_URI=${{ secrets.KAKAO_URI }}" >> .env
+        echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
+
+    - name: Upload source code and .env to EC2
       uses: appleboy/scp-action@v0.1.7
       with:
         host: ${{ secrets.EC2_HOST }}
         username: ${{ secrets.EC2_USER }}
         key: ${{ secrets.EC2_KEY }}
-        source: "."
+        source: "." 
         target: "~/bugzero-deploy"
 
     - name: SSH into EC2 and build & run Docker
@@ -34,4 +44,4 @@ jobs:
           docker stop cointalk || true
           docker rm cointalk || true
           docker build -t cointalk .
-          docker run -d --network host --name cointalk cointalk
+          docker run -d --network host --env-file .env --name cointalk cointalk
