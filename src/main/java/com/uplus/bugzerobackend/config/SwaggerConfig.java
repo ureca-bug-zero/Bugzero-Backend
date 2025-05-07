@@ -31,7 +31,7 @@ public class SwaggerConfig {
         String[] paths = {"/**"};
 
         return GroupedOpenApi.builder()
-                .group("BugZero Todo List API")
+                .group("BugZero-todo-api")
                 .pathsToMatch(paths)
                 .build();
     }
