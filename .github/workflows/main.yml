@@ -22,6 +22,9 @@ jobs:
         echo "KAKAO_URI=${{ secrets.KAKAO_URI }}" >> .env
         echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
 
+    - name: ✅ 확인 - .env 생성됐는지 체크
+      run: ls -l .env
+
     - name: Build Spring Boot App
       run: ./gradlew clean build -x test
 
