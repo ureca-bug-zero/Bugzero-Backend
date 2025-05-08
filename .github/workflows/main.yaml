@@ -17,6 +17,7 @@ jobs:
           echo "KAKAO_ID=${{ secrets.KAKAO_ID }}" >> .env
           echo "KAKAO_SECRET=${{ secrets.KAKAO_SECRET }}" >> .env
           echo "KAKAO_URI=${{ secrets.KAKAO_URI }}" >> .env
+          echo "KAKAO_LOGOUT_URI=${{ secrets.KAKAO_LOGOUT_URI }}" >> .env
           echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
       
       - name: Build Spring Boot App
