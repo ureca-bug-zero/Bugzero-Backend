@@ -20,7 +20,9 @@ public class SecurityConfig {
                     "/v3/api-docs/**",
                     "/swagger-ui.html",
                         "/auth/kakao/callback",
-                        "/auth/kakao/login"
+                        "/auth/kakao/login",
+                        "/auth/kakao/logout",
+                        "/home"
                 ).permitAll()
                 .anyRequest().authenticated()
             )
