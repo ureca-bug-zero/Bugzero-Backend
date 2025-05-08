@@ -22,7 +22,8 @@ public class SecurityConfig {
                         "/auth/kakao/callback",
                         "/auth/kakao/login",
                         "/auth/kakao/logout",
-                        "/home"
+                        "/home",
+                        "/**"
                 ).permitAll()
                 .anyRequest().authenticated()
             )
