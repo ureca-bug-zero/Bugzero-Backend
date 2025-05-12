@@ -35,4 +35,10 @@
         WHERE id = #{id}
     </update>
 
+    <update id="updateWeekScore" parameterType="com.uplus.bugzerobackend.dto.UserDto">
+        UPDATE user
+        SET week_score = #{weekScore}
+        WHERE id = #{id}
+    </update>
+
 </mapper>

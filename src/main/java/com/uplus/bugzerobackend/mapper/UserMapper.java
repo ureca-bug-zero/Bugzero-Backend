@@ -17,4 +17,5 @@ public interface UserMapper {
   KakaoUserDto getUserByEmail(@Param("email") String email);
   void insertUser(KakaoUserDto user);
   void update(UserDto userList);  // userList 수정
+  void updateWeekScore(UserDto user);
 }

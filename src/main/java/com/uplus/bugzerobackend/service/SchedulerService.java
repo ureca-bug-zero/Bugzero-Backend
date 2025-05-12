@@ -94,7 +94,7 @@ public class SchedulerService implements SchedulingConfigurer{
 				user.setWeekScore((int) Math.round(newScore));
 			}
 			
-			userMapper.update(user);
+			userMapper.updateWeekScore(user);
 			
 			// 미션 자동화 
 			TodoListDto todo = new TodoListDto();
