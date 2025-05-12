@@ -33,21 +33,25 @@ public class KakaoAuthController {
     @GetMapping("/kakao/callback")
     public ResponseEntity<ApiResponseDto<String>> kakaoCallback(@RequestParam("code") String authorizationCode) {
         KakaoUserDto user = kakaoAuthService.registerOrLoginWithCode(authorizationCode);
-        
-        // JWT 토큰 생성
+        //JWT 토큰 생성
         String jwtToken = jwtTokenService.generateToken(user);
-        return ResponseEntity.ok(ApiResponseDto.success("로그인 성공", jwtToken));
+
+        return ResponseEntity.ok()
+        		// header 에 토큰 넣어서 보냄
+            .header("Authorization", "Bearer " + jwtToken)
+            .body(ApiResponseDto.success("로그인 성공", jwtToken));
     }
-    
+
+
     // 카카오 로그아웃 처리 -> kakao-redirect-url로 redirect
     @GetMapping("/kakao/logout")
     public void kakaoLogout(HttpServletResponse response) throws Exception {
         String logoutUrl = "https://kauth.kakao.com/oauth/logout" +
-            "?client_id=" + kakaoAuthService.getClientId() +
-            "&logout_redirect_uri=" + kakaoAuthService.getLogoutRedirectUri();
+                "?client_id=" + kakaoAuthService.getClientId() +
+                "&logout_redirect_uri=" + kakaoAuthService.getLogoutRedirectUri();
 
         response.sendRedirect(logoutUrl);
     }
-
-    
 }
+
+
