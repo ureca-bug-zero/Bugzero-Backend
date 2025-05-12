@@ -132,7 +132,7 @@ public class KakaoAuthService {
 
         return newUser; // 새로 가입한 회원 정보 반환
     }
-    
+
     public String getClientId() {
         return clientId;
     }
