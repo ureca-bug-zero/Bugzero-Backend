@@ -30,7 +30,7 @@ public class KakaoAuthService {
 
     @Value("${kakao.redirect-uri}")
     private String redirectUri;
-
+    
     @Value("${kakao.logout-redirect-uri}")
     private String logoutRedirectUri;
 
