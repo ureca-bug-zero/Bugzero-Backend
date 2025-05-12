@@ -31,15 +31,12 @@ public class KakaoAuthController {
 
     // 카카오 콜백 처리
     @GetMapping("/kakao/callback")
-    public ResponseEntity<ApiResponseDto<String>> kakaoCallback(@RequestParam("code") String authorizationCode) {
+    public void kakaoCallback(@RequestParam("code") String authorizationCode, HttpServletResponse response) throws Exception {
         KakaoUserDto user = kakaoAuthService.registerOrLoginWithCode(authorizationCode);
-        //JWT 토큰 생성
         String jwtToken = jwtTokenService.generateToken(user);
 
-        return ResponseEntity.ok()
-        		// header 에 토큰 넣어서 보냄
-            .header("Authorization", "Bearer " + jwtToken)
-            .body(ApiResponseDto.success("로그인 성공", jwtToken));
+        response.setHeader("Authorization", "Bearer " + jwtToken);
+        response.sendRedirect("http://localhost:5173/kakao/callback?token=" + jwtToken);
     }
 
 
