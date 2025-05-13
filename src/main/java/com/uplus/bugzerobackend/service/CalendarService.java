@@ -13,22 +13,27 @@ import com.uplus.bugzerobackend.dto.TodoListDto;
 @Service
 public class CalendarService {
     public Map<Integer, Double> processProgress(List<TodoListDto> todoLists) {
-        Map<Integer, Double> progressMap = new HashMap<>();
-        // 체크한 내용 크기
-        long checkedCount = todoLists.stream().filter(todo -> todo.isChecked()).count();
-        // 전체 크기
-        int totalCount = todoLists.size();
-        // 미션인 값 가져와서 isChecked인지 확인
-        Optional<TodoListDto> missionTodo = todoLists.stream().filter(todo -> todo.isMission()).findFirst();
-        boolean isMissionChecked = missionTodo.map(TodoListDto::isChecked).orElse(false);
+        Map<Integer, List<TodoListDto>> groupedByDay = todoLists.stream()
+                .collect(Collectors.groupingBy(todo -> todo.getDate().getDayOfMonth()));
 
-        double score = 0.0;
-        if (totalCount > 0) {
-            score = (double) checkedCount / totalCount * (isMissionChecked ? 1.5 : 1.0);
-        }
-        double progress = Math.round(score * 100.0); // 소수점 2자리 반올림
-        for (TodoListDto todo : todoLists) {
-            int day = todo.getDate().getDayOfMonth();
+        Map<Integer, Double> progressMap = new HashMap<>();
+
+        for (Map.Entry<Integer, List<TodoListDto>> entry : groupedByDay.entrySet()) {
+            int day = entry.getKey();
+            List<TodoListDto> dayTodos = entry.getValue();
+
+            long checkedCount = dayTodos.stream().filter(TodoListDto::isChecked).count();
+            int totalCount = dayTodos.size();
+
+            Optional<TodoListDto> missionTodo = dayTodos.stream().filter(TodoListDto::isMission).findFirst();
+            boolean isMissionChecked = missionTodo.map(TodoListDto::isChecked).orElse(false);
+
+            double score = 0.0;
+            if (totalCount > 0) {
+                score = (double) checkedCount / totalCount * (isMissionChecked ? 1.5 : 1.0);
+            }
+
+            double progress = Math.round(score * 100.0); // 반올림
             progressMap.put(day, progress);
         }
         return progressMap;
