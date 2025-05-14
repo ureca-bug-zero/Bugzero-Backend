@@ -8,4 +8,5 @@ import lombok.Getter;
 public class FriendListDto {
     private Integer friendId;
     private String friendName;
+    private String friendemail;
 }

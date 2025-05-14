@@ -37,7 +37,7 @@ public class FriendService {
         for(Integer friendId : friendIds) {
             User user = userMapper.getUserById(friendId);
             if(user!=null) {
-                response.add(new FriendListDto(friendId, user.getName()));
+            	response.add(new FriendListDto(friendId, user.getName(), user.getEmail()));
             }
         }
         return response;

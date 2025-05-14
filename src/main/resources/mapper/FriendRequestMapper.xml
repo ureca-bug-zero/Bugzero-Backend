@@ -26,7 +26,7 @@
     </delete>
     
     <select id="findFriendRequestsByReceiverId" resultType="com.uplus.bugzerobackend.dto.FriendListDto">
-	    SELECT fr.sender_id AS senderId, u.name AS name
+	    SELECT fr.sender_id AS senderId, u.name AS name, u.email AS email
 	    FROM friend_request fr
 	    JOIN `user` u ON fr.sender_id = u.id
 	    WHERE fr.receiver_id = #{receiverId}
