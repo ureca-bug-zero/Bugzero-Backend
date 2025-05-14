@@ -45,7 +45,7 @@ public class SecurityConfig {
             "http://localhost:5173",
             "http://52.78.163.213:5173"
         ));
-        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         config.setAllowedHeaders(Arrays.asList("*"));
         config.setExposedHeaders(Arrays.asList("Authorization")); // 응답 헤더에 Authorization 노출
         config.setAllowCredentials(true); // 인증 정보 포함 허용
