@@ -32,7 +32,9 @@ public class CalendarService {
             if (totalCount > 0) {
                 score = (double) checkedCount / totalCount * (isMissionChecked ? 1.5 : 1.0);
             }
-
+            if(score > 1.0) {
+                score = 1.0;
+            }
             double progress = Math.round(score * 100.0); // 반올림
             progressMap.put(day, progress);
         }
