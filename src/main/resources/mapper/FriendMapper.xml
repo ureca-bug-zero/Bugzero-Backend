@@ -9,6 +9,13 @@
         <result column="friend_list" property="friendList" typeHandler="com.uplus.bugzerobackend.converter.JsonTypeHandler"/>
     </resultMap>
 	
+	<!-- Id 로 친구 정보 조회-->
+    <select id="getFriendUserById" parameterType="int" resultType="com.uplus.bugzerobackend.dto.FriendInfoDto">
+        SELECT id, name, `rank`
+        FROM `user`
+        WHERE id = #{userId}
+    </select>
+    
 	<!-- 특정 유저의 친구 리스트 조회 -->
     <select id="getFriendById" parameterType="int" resultMap="FriendResultMap">
         SELECT id, user_id, friend_list
