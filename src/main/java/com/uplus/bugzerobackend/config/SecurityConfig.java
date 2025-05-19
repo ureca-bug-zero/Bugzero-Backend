@@ -46,7 +46,8 @@ public class SecurityConfig {
             "http://localhost:5173",
             "http://52.78.163.213:5173",
             "https://silver-starburst-a7fd7e.netlify.app",
-            "https://bugzerooo.duckdns.org"
+            "https://bugzerooo.duckdns.org",
+            "https://bugzeromej.netlify.app"
         ));
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         config.setAllowedHeaders(Arrays.asList("*"));
@@ -67,7 +68,9 @@ public class SecurityConfig {
             "http://localhost:5173",
             "http://52.78.163.213:5173",
             "https://silver-starburst-a7fd7e.netlify.app",
-            "https://bugzerooo.duckdns.org"
+            "https://bugzerooo.duckdns.org",
+            "https://bugzeromej.netlify.app"
+
         ));
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         config.setAllowedHeaders(Arrays.asList("*"));
