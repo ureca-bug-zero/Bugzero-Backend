@@ -14,4 +14,5 @@ public interface FriendRequestMapper {
     void deleteFriendRequest(FriendResponseDto friendResponseDto);
     void updateFriendList(FriendResponseDto friendResponseDto);
     List<FriendListDto> findFriendRequestsByReceiverId(@Param("receiverId") Integer receiverId);
+    boolean existingFriendRequest(FriendRequestDto friendRequestDto);
 }

@@ -32,4 +32,12 @@
 	    WHERE fr.receiver_id = #{receiverId}
 	</select>
 
+    <select id="existingFriendRequest" resultType="boolean" parameterType="com.uplus.bugzerobackend.dto.FriendResponseDto">
+        SELECT EXISTS(
+            SELECT 1
+            FROM friend_request
+            WHERE sender_id = #{senderId}
+                AND receiver_id = #{receiverId}
+        )
+    </select>
 </mapper>

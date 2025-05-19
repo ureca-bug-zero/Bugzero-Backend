@@ -30,9 +30,15 @@ public class FriendRequestService {
             if (receiverId == null) {
                 throw new EntityNotFoundException("해당 이메일을 가진 유저가 존재하지 않습니다.");
             }
+
             FriendRequestDto friendRequestDto = new FriendRequestDto();
             friendRequestDto.setSenderId(senderId);
             friendRequestDto.setReceiverId(receiverId);
+
+            boolean isExistRequst = friendRequestMapper.existingFriendRequest(friendRequestDto);
+            if(isExistRequst) {
+                throw new IllegalStateException("이미 존재하는 요청입니다.");
+            }
 //            log.debug("dto 추가");
 
             friendRequestMapper.insertFriendRequest(friendRequestDto);
