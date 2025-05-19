@@ -47,7 +47,7 @@ public class FriendController {
         return ResponseEntity.ok(ApiResponseDto.success("친구 리스트 조회 성공", friendList.isEmpty() ? null : friendList));
     }
     
-    @GetMapping("/info2/{friendId}")
+    @GetMapping("/info/{friendId}")
     public ResponseEntity<ApiResponseDto<FriendInfoDto>> getUser(HttpServletRequest request, @PathVariable("friendId") Integer friendId){
         Integer userId = jwtTokenService.getUserId(request);
         FriendInfoDto friendInfo = friendMapper.getFriendUserById(friendId);
