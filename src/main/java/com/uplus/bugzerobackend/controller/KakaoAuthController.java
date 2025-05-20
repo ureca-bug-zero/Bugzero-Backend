@@ -37,8 +37,8 @@ public class KakaoAuthController {
 
         response.setHeader("Authorization", "Bearer " + jwtToken);
 //        response.sendRedirect("http://localhost:5173/kakao/callback?token=" + jwtToken);
-//        response.sendRedirect("https://bugzeromej.netlify.app/kakao/callback?token=" + jwtToken);
-        response.sendRedirect("https://silver-starburst-a7fd7e.netlify.app/kakao/callback?token=" + jwtToken);
+        response.sendRedirect("https://bugzeromej.netlify.app/kakao/callback?token=" + jwtToken);
+//        response.sendRedirect("https://silver-starburst-a7fd7e.netlify.app/kakao/callback?token=" + jwtToken);
 
     }
 
